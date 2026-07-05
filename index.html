@@ -1,0 +1,2031 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" style="--bg: #0d0b0f; --bg2: #161219; --bg3: #1e1829; --fg: #f0eaff; --fg2: #c9bfdf; --fg3: #8b7fa8; --accent: #b088f9; --accent2: #e8445a; --gold: #d4a843; --border: #2a1f3d; --border2: #3d2f5a;"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ray Sarlatte — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&amp;family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&amp;family=JetBrains+Mono:wght@300;400&amp;display=swap" rel="stylesheet">
+<style>
+/* ── THEME VARIABLES ──────────────────────────────────────────────────────
+   Default color palette and shared layout constants. These are overridden
+   live by the Style tab's color pickers (via inline styles on <html> and/or
+   JS), and re-baked into this :root block whenever the file is exported. */
+:root {
+  --bg:#0d0b0f;--bg2:#161219;--bg3:#1e1829;
+  --fg:#f0eaff;--fg2:#c9bfdf;--fg3:#8b7fa8;
+  --border:#2a1f3d;--border2:#3d2f5a;
+  --accent:#b088f9;--accent2:#e8445a;--gold:#d4a843;
+  --card:#161219;--radius:10px;--editor-w:400px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Crimson Pro',Georgia,serif;background:var(--bg);color:var(--fg);line-height:1.6;overflow-x:hidden;transition:background .3s,color .3s}
+/* Decorative full-page background glow (top-left/bottom-right radial gradients) and the
+   faint repeating cross-hatch pattern overlay. Both colors/pattern are editable via the
+   Style tab's "Background Effects" controls and get swapped via a dynamic <style> tag. */
+body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(ellipse 80% 60% at 20% 10%,rgba(176,136,249,.06) 0%,transparent 60%),radial-gradient(ellipse 60% 40% at 80% 80%,rgba(232,68,90,.04) 0%,transparent 50%);pointer-events:none;z-index:0}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%23b088f9' fill-opacity='0.025'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:.5}
+
+/* ── EDITOR ──────────────────────────────────────────────────────────────
+   Styles for the entire content-editing system: the floating toggle button,
+   the slide-in side panel, its tabs, form fields, add/delete buttons, and
+   the drag-free "section order" list used by the Layout tab. None of this
+   is visible to a normal visitor until the secret Shift+R+S key combo
+   reveals the toggle button (see the JS "SECRET KEY COMBO" section). */
+#editor-toggle{position:fixed;top:20px;right:20px;z-index:1000;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:9px 18px;font-family:'Cinzel',serif;font-size:12px;font-weight:600;letter-spacing:.08em;cursor:pointer;display:none;align-items:center;gap:7px;box-shadow:0 4px 24px rgba(176,136,249,.35);transition:transform .15s,box-shadow .15s}
+#editor-toggle.revealed{display:flex}
+#editor-toggle:hover{transform:translateY(-1px);box-shadow:0 6px 28px rgba(176,136,249,.5)}
+#editor-panel{position:fixed;top:0;right:0;width:var(--editor-w);height:100vh;background:var(--bg2);border-left:1px solid var(--border);z-index:999;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);overflow:hidden}
+#editor-panel.open{transform:translateX(0)}
+#editor-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+#editor-header h2{font-family:'Cinzel',serif;font-size:13px;font-weight:700;letter-spacing:.1em;color:var(--accent)}
+#editor-close{background:none;border:1px solid var(--border2);color:var(--fg3);border-radius:6px;width:28px;height:28px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}
+#editor-close:hover{color:var(--fg);border-color:var(--fg3)}
+/* Tab bar: Hero / About / Work / Contact / Layout / Style */
+#editor-tabs{display:flex;border-bottom:1px solid var(--border);flex-shrink:0;overflow-x:auto}
+.e-tab{flex:1;min-width:60px;padding:10px 8px;font-size:9.5px;font-weight:600;font-family:'Cinzel',serif;text-transform:uppercase;letter-spacing:.06em;background:none;border:none;color:var(--fg3);cursor:pointer;border-bottom:2px solid transparent;transition:color .2s,border-color .2s;white-space:nowrap}
+.e-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+/* Scrollable body holding whichever tab's fields are currently visible */
+#editor-body{flex:1;overflow-y:auto;padding:16px 20px;scrollbar-width:thin;scrollbar-color:var(--border2) transparent}
+.e-section{margin-bottom:20px}
+.e-section-title{font-family:'Cinzel',serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--fg3);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+/* Generic form field styles reused across every tab (text inputs, textareas) */
+.e-field{margin-bottom:12px}
+.e-label{display:block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;color:var(--fg3);margin-bottom:4px;text-transform:uppercase;letter-spacing:.05em}
+.e-input,.e-textarea{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--fg);font-family:'JetBrains Mono',monospace;font-size:12px;padding:8px 10px;transition:border-color .2s;resize:vertical}
+.e-input:focus,.e-textarea:focus{outline:none;border-color:var(--accent)}
+.e-textarea{min-height:72px}
+/* Color-picker row used in the Style tab: a text hex input + native <input type=color> */
+.e-color-row{display:grid;grid-template-columns:1fr 44px;gap:8px;align-items:center}
+.e-color-row input[type=color]{width:44px;height:36px;border:1px solid var(--border);border-radius:6px;background:var(--bg3);cursor:pointer;padding:2px}
+/* Repeatable "card" block used for list-style editable items (roles, socials,
+   skills, education, experience, projects, writing, custom sections, etc.) */
+.e-card{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:10px;position:relative}
+/* Brief highlight flash applied to a card when "Edit This Project" jumps the
+   editor panel to that project's card, so the destination is obvious. */
+.e-card.jump-highlight{animation:jumpHighlight 1.6s ease-out}
+@keyframes jumpHighlight{0%{box-shadow:0 0 0 2px var(--accent);background:rgba(176,136,249,.12)}100%{box-shadow:0 0 0 0 transparent;background:var(--bg3)}}
+.e-card-title{font-family:'Cinzel',serif;font-size:11px;font-weight:600;color:var(--fg2);margin-bottom:8px}
+.e-card-del{position:absolute;top:8px;right:8px;background:none;border:1px solid var(--border2);color:var(--fg3);border-radius:4px;width:22px;height:22px;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.e-card-del:hover{color:var(--accent2);border-color:var(--accent2)}
+/* Dashed "+ Add X" button used to append a new item to any editable list */
+.e-add-btn{width:100%;background:none;border:1px dashed var(--border2);border-radius:6px;color:var(--fg3);font-size:12px;padding:8px;cursor:pointer;font-family:'Cinzel',serif;font-weight:600;letter-spacing:.05em;transition:color .2s,border-color .2s}
+.e-add-btn:hover{color:var(--accent);border-color:var(--accent)}
+.e-select{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--fg);font-family:'JetBrains Mono',monospace;font-size:12px;padding:8px 10px}
+/* Layout tab: one row per page section, with up/down reorder arrows, a
+   show/hide eye toggle for built-in sections, and a delete (×) for custom
+   sections. "Hero" renders as locked/fixed and skips these controls. */
+.section-order-item{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:8px;display:flex;align-items:center;gap:10px}
+.section-order-item.locked{opacity:.55}
+.section-order-item.hidden-section{opacity:.5}
+.section-order-name{flex:1;font-family:'Cinzel',serif;font-size:12px;font-weight:600;letter-spacing:.04em;color:var(--fg2);text-transform:capitalize;display:flex;align-items:center;flex-wrap:wrap;gap:4px}
+.section-order-badge{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--fg3);text-transform:uppercase;letter-spacing:.06em;border:1px solid var(--border2);border-radius:3px;padding:2px 6px}
+.section-order-btns{display:flex;gap:4px}
+.section-order-btn{background:none;border:1px solid var(--border2);color:var(--fg3);border-radius:5px;width:26px;height:26px;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;transition:color .2s,border-color .2s;flex-shrink:0}
+.section-order-btn:hover:not(:disabled){color:var(--accent);border-color:var(--accent)}
+.section-order-btn:disabled{opacity:.25;cursor:default}
+.section-order-right{display:flex;gap:4px;align-items:center;flex-shrink:0}
+/* Sticky footer holding "Apply Changes" and "Export HTML" */
+/* Editor footer: a primary "Apply Changes" button on its own row, then a second row
+   holding the two export buttons side by side. Both export buttons share the outlined
+   secondary look; the public-export variant is tinted gold to distinguish "ship this"
+   from the plain working-copy export. */
+#editor-footer{padding:14px 20px;border-top:1px solid var(--border);flex-shrink:0;display:flex;flex-direction:column;gap:8px}
+#save-btn{flex:1;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:10px;font-family:'Cinzel',serif;font-size:12px;font-weight:700;letter-spacing:.08em;cursor:pointer;transition:opacity .2s}
+#save-btn:hover{opacity:.9}
+#editor-export-row{display:flex;gap:8px}
+#export-btn,#export-public-btn{flex:1;background:none;border:1px solid var(--border2);color:var(--fg2);border-radius:8px;padding:10px 14px;font-family:'Cinzel',serif;font-size:11px;font-weight:600;letter-spacing:.05em;cursor:pointer;transition:border-color .2s,color .2s}
+#export-btn:hover{border-color:var(--accent);color:var(--accent)}
+#export-public-btn{border-color:var(--gold)}
+#export-public-btn:hover{border-color:var(--gold);color:var(--gold)}
+
+/* ── LAYOUT ──────────────────────────────────────────────────────────────
+   Page chrome shared by every view: the wrapper that shifts left when the
+   editor panel opens, the fixed top nav bar, and the logo/links inside it. */
+#site-wrap{transition:margin-right .35s cubic-bezier(.4,0,.2,1)}
+#site-wrap.shifted{margin-right:var(--editor-w)}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:20px 52px;display:flex;align-items:center;background:linear-gradient(to bottom,var(--bg) 50%,transparent)}
+/* Nav links are absolutely centered on the page (independent of the logo's
+   width) so they stay centered even though the logo is left-aligned and the
+   floating editor toggle button sits in the top-right corner. */
+.nav-links{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;gap:36px;list-style:none}
+.nav-logo{font-family:'Cinzel',serif;font-size:20px;font-weight:900;letter-spacing:.1em;color:var(--accent);text-decoration:none;text-shadow:0 0 20px rgba(176,136,249,.4);cursor:pointer}
+.nav-links a{text-decoration:none;color:var(--fg3);font-family:'Cinzel',serif;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;transition:color .2s;cursor:pointer}
+.nav-links a:hover{color:var(--accent)}
+main{position:relative;z-index:1}
+
+/* ── PAGES ───────────────────────────────────────────────────────────────
+   This is a single-page app with two "pages" that live in the same HTML
+   document: the Home page (all the scrollable sections) and the Project
+   Detail page (a full case-study view for one project). JS toggles which
+   one is visible via the .active class instead of navigating to a new URL. */
+.page{display:none}
+.page.active{display:block}
+
+/* ── HOME SECTIONS ───────────────────────────────────────────────────────
+   Styling for every section that can appear on the Home page: Hero, About,
+   Projects, Writing, Skills, Education, Experience, and Contact. Section
+   order/visibility is controlled at runtime by the Layout tab — see the
+   "SECTION REORDERING" block further down in the JS. */
+section{max-width:960px;margin:0 auto;padding:110px 48px}
+/* Hero: full-viewport intro banner with name, tagline, and the three CTA
+   buttons (View Projects / View Resume / About Me). */
+#hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:20px;position:relative}
+.hero-eyebrow{font-family:'Cinzel',serif;font-size:11px;font-weight:600;letter-spacing:.3em;text-transform:uppercase;color:var(--gold)}
+.hero-name{font-family:'Cinzel',serif;font-size:clamp(54px,11vw,130px);font-weight:900;letter-spacing:.02em;line-height:.9;color:var(--fg);text-shadow:0 0 60px rgba(176,136,249,.2)}
+.hero-title{font-size:clamp(15px,2vw,20px);color:var(--fg3);font-style:italic;font-weight:300;letter-spacing:.05em;max-width:520px}
+.hero-tagline{font-size:clamp(16px,2vw,20px);color:var(--fg2);max-width:560px;line-height:1.7}
+.hero-cta{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:12px}
+.hero-cta .btn-outline{flex:0 0 auto;width:188px;text-align:center;padding-left:0;padding-right:0}
+.btn-primary{padding:13px 32px;background:var(--accent);color:#fff;border:none;border-radius:6px;font-family:'Cinzel',serif;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;text-decoration:none;transition:opacity .2s,transform .15s;box-shadow:0 4px 20px rgba(176,136,249,.3)}
+.btn-primary:hover{opacity:.9;transform:translateY(-1px)}
+.btn-primary[aria-disabled="true"]{opacity:.45;cursor:default;pointer-events:none;box-shadow:none}
+.btn-outline{padding:13px 32px;background:none;color:var(--fg2);border:1px solid var(--border2);border-radius:6px;font-family:'Cinzel',serif;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;text-decoration:none;transition:border-color .2s,color .2s}
+.btn-outline:hover{border-color:var(--accent);color:var(--accent)}
+.scroll-hint{position:absolute;bottom:40px;font-family:'Cinzel',serif;font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--fg3);display:flex;flex-direction:column;align-items:center;gap:10px}
+.scroll-line{width:1px;height:48px;background:linear-gradient(to bottom,var(--accent),transparent);animation:scrollline 2.2s ease-in-out infinite}
+@keyframes scrollline{0%,100%{opacity:0;transform:scaleY(0);transform-origin:top}55%{opacity:1;transform:scaleY(1)}}
+/* Shared heading style used at the top of every section ("// The Adventurer" etc). */
+.sec-eyebrow{font-family:'Cinzel',serif;font-size:10px;font-weight:600;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;display:flex;align-items:center;gap:12px}
+.sec-eyebrow::after{content:'';flex:1;max-width:60px;height:1px;background:var(--gold);opacity:.4}
+.sec-heading{font-family:'Cinzel',serif;font-size:clamp(30px,5vw,52px);font-weight:900;letter-spacing:.03em;line-height:1.1;margin-bottom:52px}
+/* About: two-column layout — bio + social links on the left, profile photo
+   (optional) and role badges stacked on the right. Collapses to one column
+   on mobile (see the @media block at the bottom of this stylesheet). */
+.about-grid{display:grid;grid-template-columns:3fr 2fr;gap:56px;align-items:start}
+.about-bio{font-size:19px;line-height:1.85;color:var(--fg2);font-weight:300}
+.about-bio strong{color:var(--accent);font-weight:600;font-style:normal}
+.about-links{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
+.social-btn{padding:9px 18px;border:1px solid var(--border2);border-radius:6px;color:var(--fg2);text-decoration:none;font-family:'Cinzel',serif;font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;transition:border-color .2s,color .2s,background .2s;display:flex;align-items:center;gap:7px;cursor:pointer}
+.social-btn:hover{border-color:var(--accent);color:var(--accent);background:rgba(176,136,249,.06)}
+/* Right column of the About grid: optional profile photo on top, role
+   badges (Game Designer / Level Designer / etc.) stacked below it. */
+.about-side{display:flex;flex-direction:column;gap:20px}
+.about-photo-wrap{position:relative;border-radius:10px;overflow:hidden;border:1px solid var(--border2);box-shadow:0 8px 32px rgba(0,0,0,.35)}
+.about-photo-wrap::before{content:'';position:absolute;inset:0;border-radius:10px;border:1px solid var(--gold);opacity:.35;pointer-events:none}
+.about-photo{display:block;width:100%;aspect-ratio:4/5;object-fit:cover;background:var(--bg3)}
+.about-roles{display:flex;flex-direction:column;gap:14px}
+.role-badge{background:var(--bg3);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:6px;padding:14px 18px}
+.role-badge-title{font-family:'Cinzel',serif;font-size:13px;font-weight:700;color:var(--accent);margin-bottom:3px}
+.role-badge-sub{font-size:13px;color:var(--fg3);font-style:italic}
+/* Favorite Games: a personal-touch strip at the bottom of the About section — box art
+   for a handful of favorite games, shown left-to-right in a fixed order (not
+   alphabetical or auto-sorted). Cover art aspect ratios vary wildly (tall posters vs
+   near-square game cases), so each cover sits in a padded, fixed-ratio card with
+   object-fit:contain so nothing gets cropped or stretched. */
+.about-favgames{margin-top:48px}
+.about-favgames-label{font-family:'Cinzel',serif;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:16px}
+.about-favgames-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.about-favgame{display:flex;flex-direction:column;gap:8px}
+.about-favgame-thumb{aspect-ratio:3/4;overflow:hidden;border-radius:8px;border:1px solid var(--border);background:var(--bg3)}
+.about-favgame-thumb img{display:block;width:100%;height:100%;object-fit:cover;object-position:center}
+/* Per-image override: some covers (near-square box art) crop too aggressively at
+   3:4 with object-fit:cover, losing logo/text at the edges. Adding "fit": "contain"
+   to that entry in data.about.favoriteGames swaps just that tile to shrink-to-fit
+   with letterboxing, while the outer frame (aspect ratio, border, radius) stays
+   exactly the same size as every other tile. */
+.about-favgame-thumb.fit-contain{display:flex;align-items:center;justify-content:center;padding:10px}
+.about-favgame-thumb.fit-contain img{width:auto;height:auto;max-width:100%;max-height:100%;object-fit:contain}
+.about-favgame-title{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--fg3);text-align:center;line-height:1.4}
+/* Skills: one block per category (Design, Writing, Software, ...), each
+   with a row of pill-shaped tags listing the individual skills. */
+.skills-grid{display:flex;flex-direction:column;gap:26px}
+.skill-cat-name{font-family:'Cinzel',serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:var(--gold);margin-bottom:12px}
+.skill-items{display:flex;flex-wrap:wrap;gap:8px}
+.skill-item{padding:6px 14px;background:var(--bg3);border:1px solid var(--border);border-radius:4px;font-size:15px;color:var(--fg2);font-family:'Crimson Pro',serif;transition:border-color .2s,color .2s}
+.skill-item:hover{border-color:var(--accent);color:var(--accent)}
+/* Projects: clickable cards on the Home page that link through to each
+   project's full detail page (see "PROJECT DETAIL PAGE" further below). */
+.proj-grid{display:flex;flex-direction:column;gap:24px}
+.proj-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:32px;display:flex;gap:32px;align-items:flex-start;transition:border-color .25s,transform .2s;position:relative;overflow:hidden;cursor:pointer}
+.proj-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:linear-gradient(to bottom,var(--accent),var(--accent2));opacity:0;transition:opacity .25s}
+.proj-card:hover{border-color:var(--border2);transform:translateX(4px)}
+.proj-card:hover::before{opacity:1}
+.proj-img{width:200px;height:130px;border-radius:6px;flex-shrink:0;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--fg3);font-size:11px;text-align:center;font-family:'JetBrains Mono',monospace;overflow:hidden}
+.proj-img img{width:100%;height:100%;object-fit:cover;border-radius:6px}
+.proj-num{font-family:'Cinzel',serif;font-size:10px;letter-spacing:.2em;color:var(--accent2);margin-bottom:6px;font-weight:600}
+.proj-title{font-family:'Cinzel',serif;font-size:22px;font-weight:700;letter-spacing:.04em;margin-bottom:8px}
+.proj-role{font-size:13px;color:var(--accent);font-style:italic;margin-bottom:12px;display:flex;gap:10px;flex-wrap:wrap}
+.proj-role span{background:rgba(176,136,249,.1);border:1px solid rgba(176,136,249,.25);border-radius:3px;padding:2px 9px;font-style:normal;font-family:'Cinzel',serif;font-size:10px;letter-spacing:.06em;font-weight:600}
+.proj-desc{font-size:16px;color:var(--fg3);line-height:1.75;margin-bottom:18px}
+.proj-links{display:flex;gap:10px;flex-wrap:wrap}
+.proj-link{font-family:'Cinzel',serif;font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:7px 16px;border:1px solid var(--border2);border-radius:4px;color:var(--fg2);text-decoration:none;transition:color .2s,border-color .2s;cursor:pointer}
+.proj-link:hover{color:var(--accent);border-color:var(--accent)}
+.proj-link.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.proj-link.primary:hover{opacity:.88}
+/* Writing: list of short-story/lore entries, each with a title, meta line
+   (type + word count), description, and an optional external "Read" link. */
+.writing-grid{display:flex;flex-direction:column;gap:16px}
+.writing-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px 28px;display:flex;justify-content:space-between;align-items:flex-start;gap:20px;transition:border-color .2s}
+.writing-card:hover{border-color:var(--border2)}
+.writing-title{font-family:'Cinzel',serif;font-size:18px;font-weight:700;letter-spacing:.04em;margin-bottom:4px}
+.writing-meta{font-size:13px;color:var(--gold);margin-bottom:8px;font-style:italic}
+.writing-desc{font-size:15px;color:var(--fg3);line-height:1.7;max-width:65ch}
+.writing-link{font-family:'Cinzel',serif;font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:7px 16px;border:1px solid var(--border2);border-radius:4px;color:var(--fg2);text-decoration:none;white-space:nowrap;flex-shrink:0;align-self:center;transition:color .2s,border-color .2s;cursor:pointer}
+.writing-link:hover{color:var(--accent);border-color:var(--accent)}
+/* Experience: accordion list — click a row's header to expand/collapse its
+   description, highlights, and tech tags (see toggleExp() in the JS). */
+.exp-list{display:flex;flex-direction:column;gap:2px}
+/* Experience groups: entries are grouped under a category label (e.g. "Tech", "Games")
+   in first-seen order from data.experience, same grouping pattern used for Environment
+   Assets. Each exp-item keeps its original data.experience index for its id/onclick even
+   though items are now visually reordered into groups, since toggleExp(i) and the editor
+   fields both key off that original index. */
+.exp-group + .exp-group{margin-top:28px}
+.exp-group-label{font-family:'Cinzel',serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:var(--gold);margin-bottom:10px}
+.exp-group-items{display:flex;flex-direction:column;gap:2px}
+.exp-item{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:border-color .2s}
+.exp-header{padding:24px 28px;cursor:pointer;display:flex;justify-content:space-between;align-items:flex-start;gap:16px;user-select:none}
+.exp-company{font-family:'Cinzel',serif;font-size:17px;font-weight:700;margin-bottom:4px;letter-spacing:.04em}
+.exp-role{font-size:15px;color:var(--accent);font-style:italic}
+.exp-date{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--fg3)}
+.exp-chevron{margin-top:4px;color:var(--fg3);font-size:18px;transition:transform .25s;flex-shrink:0}
+.exp-item.open .exp-chevron{transform:rotate(180deg)}
+.exp-body{display:none;padding:0 28px 24px}
+.exp-item.open .exp-body{display:block}
+.exp-desc{color:var(--fg3);font-size:16px;line-height:1.75;margin-bottom:16px}
+.exp-highlights{list-style:none;display:flex;flex-direction:column;gap:8px}
+.exp-highlights li{font-size:15px;color:var(--fg2);padding-left:18px;position:relative;line-height:1.6}
+.exp-highlights li::before{content:'⚔';position:absolute;left:0;color:var(--accent2);font-size:11px;top:3px}
+.exp-tech{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px}
+.tech-tag{font-size:12px;font-family:'JetBrains Mono',monospace;padding:3px 10px;background:var(--bg3);border:1px solid var(--border);border-radius:3px;color:var(--fg3)}
+/* Education: simple card list, school + degree on the left, dates on the right. */
+.edu-list{display:flex;flex-direction:column;gap:16px}
+.edu-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px 28px;display:flex;justify-content:space-between;align-items:flex-start;gap:20px}
+.edu-school{font-family:'Cinzel',serif;font-size:18px;font-weight:700;letter-spacing:.04em;margin-bottom:6px}
+.edu-degree{font-size:16px;color:var(--accent);font-style:italic}
+.edu-desc{font-size:14px;color:var(--fg3);margin-top:4px}
+.edu-date{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--fg3);flex-shrink:0}
+/* Contact: centered closing section with tagline, email link, and social buttons. */
+#contact{text-align:center}
+.contact-box{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:60px 52px;max-width:640px;margin:0 auto;position:relative;overflow:hidden}
+.contact-box::before{content:'⚜';position:absolute;top:24px;left:50%;transform:translateX(-50%);font-size:20px;color:var(--gold);opacity:.4}
+.contact-tagline{font-size:19px;color:var(--fg3);margin-bottom:32px;line-height:1.7;font-style:italic;font-weight:300}
+.contact-email{font-family:'Cinzel',serif;font-size:22px;font-weight:700;color:var(--accent);text-decoration:none;letter-spacing:.04em;transition:color .2s;display:block;margin-bottom:32px}
+.contact-email:hover{color:var(--gold)}
+.contact-links{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+/* Custom sections: user-added sections from the Layout tab. Rendered with
+   the same eyebrow/heading style as built-in sections, but with a simple
+   plain-text body instead of bespoke markup. */
+.custom-section-body{font-size:18px;line-height:1.85;color:var(--fg2);font-weight:300;max-width:760px}
+.custom-section-body p{margin-bottom:16px}
+.custom-section-body strong{color:var(--accent);font-weight:600;font-style:normal}
+footer{text-align:center;padding:32px 40px;color:var(--fg3);font-family:'Cinzel',serif;font-size:11px;letter-spacing:.12em;border-top:1px solid var(--border);position:relative;z-index:1}
+.rune-divider{text-align:center;color:var(--gold);opacity:.3;font-size:18px;letter-spacing:.5em;margin-bottom:52px;margin-top:-12px}
+
+/* ── PROJECT DETAIL PAGE ─────────────────────────────────────────────────
+   Full case-study view shown when a project card is clicked. Built by
+   renderProjectDetail() in the JS, which injects all of this markup into
+   #proj-detail-content based on the clicked project's data. */
+#page-project{background:var(--bg);min-height:100vh;padding-top:80px}
+.proj-detail{max-width:900px;margin:0 auto;padding:48px 48px 100px}
+.pd-back{display:inline-flex;align-items:center;gap:8px;font-family:'Cinzel',serif;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--fg3);cursor:pointer;margin-bottom:40px;transition:color .2s}
+.pd-header-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:40px;flex-wrap:wrap;gap:12px}
+.pd-header-row .pd-back{margin-bottom:0}
+/* "Edit This Project" button — hidden by default like the main editor
+   toggle, only shown once the secret key combo reveals editor controls. */
+.pd-edit-btn{display:none;align-items:center;gap:6px;font-family:'Cinzel',serif;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);background:rgba(176,136,249,.08);border:1px solid rgba(176,136,249,.3);border-radius:6px;padding:7px 14px;cursor:pointer;transition:background .2s,border-color .2s}
+.pd-edit-btn.revealed{display:inline-flex}
+.pd-edit-btn:hover{background:rgba(176,136,249,.16);border-color:var(--accent)}
+.pd-back:hover{color:var(--accent)}
+.pd-eyebrow{font-family:'Cinzel',serif;font-size:10px;font-weight:600;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+.pd-title{font-family:'Cinzel',serif;font-size:clamp(36px,7vw,72px);font-weight:900;letter-spacing:.02em;line-height:.95;margin-bottom:16px}
+.pd-roles{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:32px}
+.pd-role-tag{background:rgba(176,136,249,.12);border:1px solid rgba(176,136,249,.3);border-radius:4px;padding:4px 12px;font-family:'Cinzel',serif;font-size:11px;font-weight:600;letter-spacing:.07em;color:var(--accent)}
+/* Meta bar: Type / Team / Date, shown as three columns below the title */
+.pd-meta-bar{display:flex;gap:32px;flex-wrap:wrap;padding:20px 24px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:40px}
+.pd-meta-item{}
+.pd-meta-label{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--fg3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px}
+.pd-meta-val{font-family:'Cinzel',serif;font-size:14px;font-weight:600;color:var(--fg2)}
+.pd-hero-img{width:100%;height:auto;max-height:700px;object-fit:contain;background:var(--bg3);border-radius:var(--radius);border:1px solid var(--border);margin-bottom:40px}
+.pd-hero-placeholder{width:100%;height:300px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;color:var(--fg3);font-family:'JetBrains Mono',monospace;font-size:13px;margin-bottom:40px}
+.pd-section-head{font-family:'Cinzel',serif;font-size:13px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;margin-top:40px}
+.pd-body{font-size:18px;line-height:1.9;color:var(--fg2);font-weight:300}
+.pd-body p{margin-bottom:16px}
+.pd-body strong{color:var(--accent);font-weight:600}
+.pd-highlights{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:24px}
+.pd-highlights li{font-size:17px;color:var(--fg2);padding-left:22px;position:relative;line-height:1.6}
+.pd-highlights li::before{content:'⚔';position:absolute;left:0;color:var(--accent2);font-size:12px;top:4px}
+.pd-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.pd-tag{font-size:13px;font-family:'JetBrains Mono',monospace;padding:5px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:4px;color:var(--fg3)}
+/* Play / Source buttons at the bottom of the case study */
+.pd-links{display:flex;gap:12px;flex-wrap:wrap;margin-top:40px;padding-top:32px;border-top:1px solid var(--border)}
+.pd-gallery{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:16px}
+.pd-gallery figure{margin:0;display:flex;flex-direction:column;gap:8px}
+.pd-gallery img{width:100%;aspect-ratio:16/10;border-radius:8px;border:1px solid var(--border);object-fit:contain;background:var(--bg3)}
+.pd-gallery figcaption{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--fg3);text-align:center;line-height:1.4}
+/* Environment backgrounds: kept visually separate from the gameplay screenshot gallery
+   above, since these are ultra-wide panoramic pieces (roughly 5-6:1) that would get
+   squeezed into near-illegibility inside the gallery's 2-column 16:10 grid. Rendered
+   single-column, full-width, with an explicit named label under each rather than an
+   auto-generated filename caption, since these represent specific named game locations. */
+.pd-backgrounds{display:flex;flex-direction:column;gap:24px;margin-top:16px}
+.pd-backgrounds figure{margin:0;display:flex;flex-direction:column;gap:8px}
+.pd-backgrounds img{width:100%;border-radius:8px;border:1px solid var(--border);display:block}
+.pd-backgrounds figcaption{font-family:'Cinzel',serif;font-size:13px;font-weight:600;letter-spacing:.05em;color:var(--gold);text-align:center}
+/* Environment assets: individual created props & set dressing (crystal/rock
+   formations, trees, foliage, candy-cane pieces, structures) that sit ON TOP of
+   the panoramic backgrounds above — distinct from both the gameplay-screenshot
+   Gallery and the full-scene Backgrounds. These are transparent-PNG single
+   objects of wildly varying dimensions, so they're shown on padded square tiles
+   with object-fit:contain (never cropped) in a compact auto-fill grid, split
+   into category sub-groups rather than one flat wall of images. */
+.pd-env-group{margin-top:16px}
+.pd-env-group + .pd-env-group{margin-top:32px}
+.pd-env-group-label{font-family:'Cinzel',serif;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+.pd-env-assets{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:16px}
+.pd-env-assets figure{margin:0;display:flex;flex-direction:column;gap:8px}
+.pd-env-assets .pd-env-thumb{display:flex;align-items:center;justify-content:center;aspect-ratio:1/1;padding:14px;border-radius:8px;border:1px solid var(--border);background:var(--bg3)}
+.pd-env-assets img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;display:block}
+.pd-env-assets figcaption{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--fg3);text-align:center;line-height:1.4}
+/* Prev/Next project navigation at the very bottom of the case study */
+.pd-nav{display:flex;justify-content:space-between;margin-top:64px;padding-top:32px;border-top:1px solid var(--border)}
+.pd-nav-btn{font-family:'Cinzel',serif;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--fg3);cursor:pointer;transition:color .2s;display:flex;align-items:center;gap:8px}
+.pd-nav-btn:hover{color:var(--accent)}
+
+/* ── TOAST ───────────────────────────────────────────────────────────────
+   Small floating confirmation message (e.g. "Changes applied! ✦") that
+   slides up from the bottom of the screen and fades back out automatically.
+   Triggered by showToast() in the JS. */
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(60px);background:var(--accent);color:#fff;padding:10px 22px;border-radius:6px;font-family:'Cinzel',serif;font-size:12px;font-weight:700;letter-spacing:.08em;z-index:2000;transition:transform .3s;pointer-events:none}
+#toast.show{transform:translateX(-50%) translateY(0)}
+
+/* ── RESPONSIVE (MOBILE) ─────────────────────────────────────────────────
+   Collapses multi-column layouts to single-column and hides the desktop
+   nav links below 720px viewport width. The editor panel becomes full-width
+   on mobile too, since the fixed side-panel width wouldn't fit comfortably. */
+@media(max-width:720px){
+  nav{padding:16px 20px}
+  .nav-links{display:none}
+  #editor-panel{width:100%}
+  #site-wrap.shifted{margin-right:0}
+  section{padding:80px 24px}
+  .about-grid{grid-template-columns:1fr}
+  .about-photo-wrap{max-width:280px;margin:0 auto 24px}
+  .proj-card{flex-direction:column}
+  .proj-img{width:100%;height:160px}
+  .contact-box{padding:40px 24px}
+  .writing-card{flex-direction:column}
+  .pd-gallery{grid-template-columns:1fr}
+  .pd-env-assets{grid-template-columns:repeat(auto-fill,minmax(120px,1fr))}
+  .about-favgames-grid{grid-template-columns:repeat(2,1fr)}
+  .proj-detail{padding:32px 20px 80px}
+}
+</style>
+</head>
+<body>
+<!-- ═══════════════════════════════════════════════════════════════════════
+     RAY SARLATTE PORTFOLIO — single-file, self-contained portfolio site.
+
+     Structure of this <body>:
+       1. Editor toggle button + slide-in editor panel (hidden by default;
+          revealed only via the Shift+R+S key combo — see JS).
+       2. Site wrapper: top nav, Home page (all sections), Project Detail
+          page (case-study view for one project).
+       3. A toast notification element used for brief confirmations.
+       4. One inline script block at the end of the file holding ALL data
+          and logic — there are no external JS files, this page is fully
+          self-contained and works offline once downloaded.
+     ═══════════════════════════════════════════════════════════════════════ -->
+
+<!-- Hidden by default; appears when the Shift+R+S combo is pressed (see
+     the "SECRET KEY COMBO" block in the JS). Opens/closes the editor panel. -->
+
+
+<!-- ═══════════════════════════════════════════════════════════════
+     EDITOR PANEL
+     Slide-in side panel for editing every piece of content on the site
+     without touching code. Six tabs, each editing a different part of
+     the page; "Apply Changes" re-renders the live page, "Export HTML"
+     downloads a new copy of this file with all edits baked in.
+     ═══════════════════════════════════════════════════════════════ -->
+
+
+<!-- Brief floating confirmation message; text and visibility are controlled
+     entirely by showToast(message) in the JS. -->
+
+
+<!-- ═══════════════ SITE WRAPPER ═══════════════
+     Wraps the nav + main content; gets a right margin pushed in via the
+     "shifted" class whenever the editor panel is open, so page content
+     visibly makes room for the panel instead of being covered by it. -->
+<div id="site-wrap" class="">
+<!-- Fixed top navigation: logo (left, also acts as "scroll to top" / home
+     link) and centered nav links that smooth-scroll to each section. -->
+<nav>
+  <span class="nav-logo" id="nav-brand-el" onclick="showPage('home');window.scrollTo(0,0)">R.S.</span>
+  <ul class="nav-links">
+    <li><a onclick="showPage('home');scrollToSection('projects')">Projects</a></li>
+    <li><a onclick="showPage('home');scrollToSection('writing')">Writing</a></li>
+    <li><a onclick="showPage('home');scrollToSection('experience')">Experience</a></li>
+    <li><a onclick="showPage('home');scrollToSection('about')">About</a></li>
+    <li><a onclick="showPage('home');scrollToSection('contact')">Contact</a></li>
+  </ul>
+</nav>
+
+<main>
+
+<!-- ═══ HOME PAGE ═══
+     All scrollable sections live here. Their on-screen order is NOT fixed
+     by this HTML — applySectionOrder() in the JS re-appends each <section>
+     element into this container according to data.sectionOrder every time
+     the page (re)renders, so editing the Layout tab can freely reorder,
+     hide, or insert sections without touching this markup. -->
+<div id="page-home" class="page active">
+
+<!-- Custom sections (added via the Layout tab's "+ Add New Section") are
+     rendered into this container by renderCustomSections(). It starts
+     empty and only gains content once at least one custom section exists. -->
+<div id="custom-sections-container"></div><section id="hero"><!-- Full-viewport intro banner: name, tagline, CTA buttons -->
+  <div class="hero-eyebrow" id="hero-eyebrow-el">Portfolio — 2026</div>
+  <h1 class="hero-name" id="hero-name-el">Ray Sarlatte</h1>
+  <p class="hero-title" id="hero-title-el">Game Designer · Level Designer · Narrative Designer · Writer</p>
+  <p class="hero-tagline" id="hero-tagline-el">Hail and well met, fair traveler. I’m Ray — a storyteller, world-builder, and designer of games, levels, and the narratives that bring them to life.</p>
+  <div class="hero-cta">
+    <a class="btn-outline" onclick="showPage('home');scrollToSection('projects')">View Projects</a>
+    <a class="btn-primary" id="hero-cta-el" target="_blank" aria-disabled="true">View Resume</a>
+    <a class="btn-outline" onclick="showPage('home');scrollToSection('about')">About Me</a>
+  </div>
+  <div class="scroll-hint"><span>Descend</span><div class="scroll-line"></div></div>
+</section><section id="projects"><!-- Clickable project cards -> each opens its own detail page -->
+  <div class="sec-eyebrow">// The Quests</div>
+  <h2 class="sec-heading">Projects</h2>
+  <div class="rune-divider">✦ ✧ ✦</div>
+  <div class="proj-grid" id="proj-grid-el">
+    <div class="proj-card" onclick="showPage('project',0);window.scrollTo(0,0)">
+      <div class="proj-img"><img src="images/glocktopus/main-capsule.png" alt="Glocktopus"></div>
+      <div style="flex:1;min-width:0">
+        <div class="proj-num">01 · Capstone — Team of 13 (Dustbath Studios)</div>
+        <h3 class="proj-title">Glocktopus</h3>
+        <div class="proj-role"><span>Lead Designer</span><span>Assistant Producer</span></div>
+        <p class="proj-desc"><em style="color:var(--fg3);font-size:13px">Unreal Engine · Multiplayer Puzzle-Stealth · Aug 2025 – May 2026</em><br><br>Shipped on Steam as a 13-person capstone production in Unreal Engine. As Lead Designer &amp; Assistant Producer, I led level design across five environments, built and maintained the team’s design documentation hub, created Blueprint actors, applied &amp; created materials for environment art, and managed production infrastructure including the team’s LLC, business bank account, Steam account, and Steamworks setup.</p>
+        <div class="proj-links">
+          <span class="proj-link primary" onclick="event.stopPropagation();showPage('project',0);window.scrollTo(0,0)">View Case Study ↗</span>
+          <a href="https://store.steampowered.com/app/4440410/GLOCKTOPUS/" class="proj-link" target="_blank" onclick="event.stopPropagation()">Play on Steam</a>
+        </div>
+      </div>
+    </div>
+    <div class="proj-card" onclick="showPage('project',1);window.scrollTo(0,0)">
+      <div class="proj-img"><img src="images/polyhue/hero.jpg" alt="PolyHue"></div>
+      <div style="flex:1;min-width:0">
+        <div class="proj-num">02 · Solo Project</div>
+        <h3 class="proj-title">PolyHue</h3>
+        <div class="proj-role"><span>Solo Designer</span></div>
+        <p class="proj-desc"><em style="color:var(--fg3);font-size:13px">Print-and-Play · Strategic Boss Rush Card Game · Oct – Dec 2024</em><br><br>Designed a tactical card game where players lead a team of adventurers to defeat rotating Boss Monsters. Emphasized strategic planning, resource management, and adaptability in gameplay.</p>
+        <div class="proj-links">
+          <span class="proj-link primary" onclick="event.stopPropagation();showPage('project',1);window.scrollTo(0,0)">View Case Study ↗</span>
+          <a href="https://alternisray.itch.io/polyhueprototype" class="proj-link" target="_blank" onclick="event.stopPropagation()">Play on Itch.io</a>
+        </div>
+      </div>
+    </div>
+    <div class="proj-card" onclick="showPage('project',2);window.scrollTo(0,0)">
+      <div class="proj-img"><img src="images/eldritch-confection/ec-hero.png" alt="Eldritch Confection"></div>
+      <div style="flex:1;min-width:0">
+        <div class="proj-num">03 · Team of 5 (Team Teeth Thieves)</div>
+        <h3 class="proj-title">Eldritch Confection</h3>
+        <div class="proj-role"><span>Narrative Designer</span><span>Level Designer</span><span>Producer</span><span>Environment Artist</span></div>
+        <p class="proj-desc"><em style="color:var(--fg3);font-size:13px">Unity · 2D Side-Scroller Beat 'em Up · May – Aug 2024</em><br><br>Designed and prototyped game sections focused on cohesive visuals and progressive difficulty. Created and balanced enemy types through playtesting. Integrated narrative elements through environmental storytelling and visual context.</p>
+        <div class="proj-links">
+          <span class="proj-link primary" onclick="event.stopPropagation();showPage('project',2);window.scrollTo(0,0)">View Case Study ↗</span>
+          <a href="https://alternisray.itch.io/eldritch-confection" class="proj-link" target="_blank" onclick="event.stopPropagation()">Play on Itch.io</a>
+        </div>
+      </div>
+    </div>
+    <div class="proj-card" onclick="showPage('project',3);window.scrollTo(0,0)">
+      <div class="proj-img"><img src="images/celestial-bodies/cb-hero.png" alt="Celestial Bodies"></div>
+      <div style="flex:1;min-width:0">
+        <div class="proj-num">04 · Team of 4 (Frogs with Hats)</div>
+        <h3 class="proj-title">Celestial Bodies</h3>
+        <div class="proj-role"><span>Narrative Designer</span><span>Dialogue Writer</span><span>Card Designer</span></div>
+        <p class="proj-desc"><em style="color:var(--fg3);font-size:13px">GameMaker · Narrative Card Battler RPG · Jan – Apr 2024</em><br><br>Planned and structured in-game events to align narrative pacing with storytelling goals. Wrote and edited dialogue for consistency in voice, theme, and emotional impact. Created card art maintaining visual cohesion with the established style guide.</p>
+        <div class="proj-links">
+          <span class="proj-link primary" onclick="event.stopPropagation();showPage('project',3);window.scrollTo(0,0)">View Case Study ↗</span>
+          <a href="https://ghostlord79.itch.io/celestial-bodies" class="proj-link" target="_blank" onclick="event.stopPropagation()">Play on Itch.io</a>
+        </div>
+      </div>
+    </div>
+    <div class="proj-card" onclick="showPage('project',4);window.scrollTo(0,0)">
+      <div class="proj-img"><img src="images/eusedia/eusedia-hero.png" alt="Eusedia"></div>
+      <div style="flex:1;min-width:0">
+        <div class="proj-num">05 · Solo DM</div>
+        <h3 class="proj-title">Eusedia</h3>
+        <div class="proj-role"><span>Dungeon Master</span><span>Narrative Designer</span><span>World-Builder</span></div>
+        <p class="proj-desc"><em style="color:var(--fg3);font-size:13px">D&amp;D 5E · Homebrew TTRPG Campaign · July 2023 – May 2025</em><br><br>Led a 17-session homebrew D&amp;D campaign in an original high-fantasy world. Developed custom mechanics, extensive lore, and session planning. Themes of moral ambiguity and post-divine tragedy.</p>
+        <div class="proj-links">
+          <span class="proj-link primary" onclick="event.stopPropagation();showPage('project',4);window.scrollTo(0,0)">View Case Study ↗</span>
+          
+        </div>
+      </div>
+    </div></div>
+</section><section id="writing"><!-- Short-story / lore list with external "Read" links -->
+  <div class="sec-eyebrow">// The Lore</div>
+  <h2 class="sec-heading">Writing</h2>
+  <div class="rune-divider">✦ ✧ ✦</div>
+  <div class="writing-grid" id="writing-grid-el">
+    <div class="writing-card">
+      <div><div class="writing-title">Aris’s Loop</div><div class="writing-meta">Short Story · 4,602 words</div><p class="writing-desc">A piece set in the past of the D&amp;D campaign world of Eusedia, recounting the final moments of a civilization through the eyes of the person who unknowingly caused its destruction.</p></div>
+      <a href="https://drive.google.com/file/d/1s9YmuO3cRndI1quxSLUkS7Uy-V2nEQlt/view?usp=sharing" class="writing-link" target="_blank">Read ↗</a>
+    </div>
+    <div class="writing-card">
+      <div><div class="writing-title">Gamebook</div><div class="writing-meta">Fighting Fantasy-Style Gamebook · 35,180 words</div><p class="writing-desc">Inspired by the Epic of Gilgamesh — an exercise in matching player choice to compelling narrative while building an engaging game system.</p></div>
+      <a href="https://drive.google.com/file/d/1W9rUIwz6Z-DqgBLzA3mGALbu6R2Y7NFg/view?usp=sharing" class="writing-link" target="_blank">Read ↗</a>
+    </div>
+    <div class="writing-card">
+      <div><div class="writing-title">Five Minutes</div><div class="writing-meta">Short Story · 1,593 words</div><p class="writing-desc">Broken into small sections to encapsulate tiny emotional moments within the last five minutes and the first five minutes of a man’s life.</p></div>
+      <a href="https://drive.google.com/file/d/16WoPaNoVO_SrUdpT5XN_ISfebgPVJs7x/view?usp=sharing" class="writing-link" target="_blank">Read ↗</a>
+    </div>
+    <div class="writing-card">
+      <div><div class="writing-title">Eusedia — D&amp;D Campaign</div><div class="writing-meta">Narrative Design / Worldbuilding · 17 Sessions</div><p class="writing-desc">Led a 17-session tabletop RPG campaign focused on moral ambiguity and the complexities of good vs. evil. Custom mechanics for chase sequences and puzzle-solving. Extensive worldbuilding, lore, and session planning.</p></div>
+      
+    </div></div>
+</section><section id="skills"><!-- Skill tags grouped by category -->
+  <div class="sec-eyebrow">// The Arsenal</div>
+  <h2 class="sec-heading">Skills &amp; Tools</h2>
+  <div class="skills-grid" id="skills-grid-el">
+    <div><div class="skill-cat-name">Design</div><div class="skill-items"><div class="skill-item">Level Design</div><div class="skill-item">Narrative Design</div><div class="skill-item">Puzzle Design</div><div class="skill-item">Card Game Design</div><div class="skill-item">Iterative Design</div><div class="skill-item">White Boxing</div><div class="skill-item">Playtesting</div></div></div>
+    <div><div class="skill-cat-name">Writing</div><div class="skill-items"><div class="skill-item">Dialogue Writing</div><div class="skill-item">World-Building</div><div class="skill-item">Story Structure</div><div class="skill-item">Lore Design</div><div class="skill-item">Dungeon Mastering</div></div></div>
+    <div><div class="skill-cat-name">Software</div><div class="skill-items"><div class="skill-item">Unreal Engine</div><div class="skill-item">Unity</div><div class="skill-item">GameMaker</div><div class="skill-item">Maya</div><div class="skill-item">Adobe Photoshop</div><div class="skill-item">Adobe Acrobat</div><div class="skill-item">Perforce</div><div class="skill-item">GitHub</div><div class="skill-item">Trello</div></div></div>
+    <div><div class="skill-cat-name">Soft Skills</div><div class="skill-items"><div class="skill-item">Team Communication</div><div class="skill-item">Version Control</div><div class="skill-item">Iterative Design</div><div class="skill-item">Microsoft Office</div></div></div></div>
+</section><section id="education"><!-- School / degree / dates cards -->
+  <div class="sec-eyebrow">// The Codex</div>
+  <h2 class="sec-heading">Education</h2>
+  <div class="edu-list" id="edu-list-el">
+    <div class="edu-card"><div><div class="edu-school">University of Utah</div><div class="edu-degree">Two B.S. Degrees — English &amp; Game Design</div><div class="edu-desc">Relevant Classes: Games Capstone, Level Design, Alternative Game Dev, Adv Video Game Storytelling, Traditional Game Dev, Intro to Game Design</div></div><div class="edu-date">2021 – 2026</div></div></div>
+</section><section id="experience"><!-- Job history accordion (click header to expand) -->
+  <div class="sec-eyebrow">// The Guild Log</div>
+  <h2 class="sec-heading">Experience</h2>
+  <div class="exp-list" id="exp-list-el">
+    <div class="exp-group"><div class="exp-group-label">Tech</div><div class="exp-group-items">
+    <div class="exp-item" id="exp-0">
+      <div class="exp-header" onclick="toggleExp(0)">
+        <div><div class="exp-company">Best Buy — Geek Squad</div><div class="exp-role">Consultation Agent</div></div>
+        <div style="text-align:right;flex-shrink:0"><div class="exp-date">Oct 2024 – Present</div><div class="exp-chevron">▾</div></div>
+      </div>
+      <div class="exp-body"><p class="exp-desc">Providing frontline technical support and client service.</p><ul class="exp-highlights"><li>Manage work orders and ensure timely, accurate delivery of service</li><li>Coordinate with in-store and remote teams to maintain service quality</li></ul><div class="exp-tech"><span class="tech-tag">Client Communication</span><span class="tech-tag">Technical Support</span><span class="tech-tag">Logistics</span></div></div>
+    </div>
+    <div class="exp-item" id="exp-2">
+      <div class="exp-header" onclick="toggleExp(2)">
+        <div><div class="exp-company">Best Buy — Geek Squad</div><div class="exp-role">Advanced Repair Agent</div></div>
+        <div style="text-align:right;flex-shrink:0"><div class="exp-date">Jan 2026 – Present</div><div class="exp-chevron">▾</div></div>
+      </div>
+      <div class="exp-body"><p class="exp-desc">Diagnose and repair computers, devices, and consumer electronics for customers</p><ul class="exp-highlights"><li>Perform hardware and software troubleshooting to resolve technical issues efficiently</li><li>Maintain accurate service records and repair documentation</li><li>Communicate repair solutions and recommendations to customers in a professional manner</li><li>Collaborate with team members to ensure high-quality service and customer satisfaction</li></ul><div class="exp-tech"><span class="tech-tag">Client Communication</span><span class="tech-tag">Technical Support</span><span class="tech-tag">Logistics</span><span class="tech-tag">Hardware Repair</span><span class="tech-tag">Software Repair</span><span class="tech-tag">Virus Removal</span><span class="tech-tag">Data Transfer</span></div></div>
+    </div></div></div>
+    <div class="exp-group"><div class="exp-group-label">Games</div><div class="exp-group-items">
+    <div class="exp-item" id="exp-1">
+      <div class="exp-header" onclick="toggleExp(1)">
+        <div><div class="exp-company">Dustbath Studios (Glocktopus)</div><div class="exp-role">Lead Designer + Asst. Producer</div></div>
+        <div style="text-align:right;flex-shrink:0"><div class="exp-date">Nov 2025 – Present</div><div class="exp-chevron">▾</div></div>
+      </div>
+      <div class="exp-body"><p class="exp-desc">Sole legal founder of the studio’s LLC, though built and run in the spirit of a co-founded studio with a 13-person capstone team; balanced Lead Designer duties with production and business operations for the team’s game, Glocktopus.</p><ul class="exp-highlights"><li>Founded and legally established Dustbath Studios LLC, including the business bank account and Steam/Steamworks store page</li><li>Led level design across five environments, from whitebox blockouts through dressed, playable levels with documented puzzle flows</li><li>Built and maintained the team’s Design Documentation Hub and Microsoft Loop task-assignment system to keep a 13-person team organized</li><li>Balanced Lead Designer responsibilities with Assistant Producer duties across the full production cycle</li></ul><div class="exp-tech"><span class="tech-tag">Team Leadership</span><span class="tech-tag">Production</span><span class="tech-tag">Documentation</span><span class="tech-tag">Microsoft Loop</span><span class="tech-tag">Steam Publishing</span><span class="tech-tag">Level Design</span><span class="tech-tag">Puzzle Design</span><span class="tech-tag">QA &amp; Playtesting</span><span class="tech-tag">Perforce</span><span class="tech-tag">Unreal Engine</span><span class="tech-tag">Live Ops</span></div></div>
+    </div></div></div></div>
+</section><section id="about"><!-- Bio + photo + role badges + social links -->
+  <div class="sec-eyebrow">// The Adventurer</div>
+  <h2 class="sec-heading">About Me</h2>
+  <div class="about-grid">
+    <div>
+      <div class="about-bio" id="about-bio-el"><p>Thanks for taking a look around. Here’s a little bit about me! I’m a <strong>Game Designer</strong> &amp; <strong>Narrative Designer</strong> currently based in California. I love interactive storytelling and creating gameplay moments that stick with players long after the screen fades to black. I’m honing my skills through solo projects and collaborative work to contribute to innovative, story-rich games.</p><p style="margin-top:16px">I have two bachelor’s degrees from the <strong>University of Utah</strong> — one in English and one in Game Design — which let me focus specifically on game-based narrative and level design. My background in writing and literature gives me a strong foundation for crafting and understanding what makes compelling characters, meaningful dialogue, and immersive environments that support player-driven storytelling.</p><p style="margin-top:16px">Storytelling has always been at the heart of who I am. Outside of design work, I run TTRPG campaigns for friends and family using systems like Dungeons &amp; Dragons &amp; Daggerheart and explore the mechanics of other tabletop RPGs in my spare time. I constantly stay engaged with narrative systems and game design from different angles, whether writing short stories, poems, worldbuilding for my own projects, or consuming a variety of books and media to better understand how professionals craft their stories. I’m always thinking about what it means to be a good storyteller and how I can improve those qualities in myself.</p><p style="margin-top:16px">At the core of my design philosophy is a belief that the most powerful stories in games aren’t just told, they’re lived. Whether it’s the layout of a dungeon, a forgotten ruin tucked into the world, or the subtle emotional beats in a conversation, I strive to build experiences that reward curiosity and invite emotional investment. I want each player’s journey to feel personal and meaningful, because a story isn’t just what happens in games — player choices drive it.</p></div>
+      <div class="about-links" id="about-links-el"><a href="https://www.linkedin.com/in/ray-sarlatte421/" class="social-btn" target="_blank">💼 LinkedIn</a><a href="mailto:rsarlatte421@gmail.com" class="social-btn" target="_blank">✉ Email</a></div>
+    </div>
+    <div class="about-side">
+      <div class="about-photo-wrap" id="about-photo-wrap-el" style="display: block;">
+        <img class="about-photo" id="about-photo-el" alt="Ray Sarlatte" src="images/about/profpic2026.jpg">
+      </div>
+      <div class="about-roles" id="about-roles-el"><div class="role-badge"><div class="role-badge-title">Game Designer</div><div class="role-badge-sub">Mechanics, Systems &amp; Balance</div></div><div class="role-badge"><div class="role-badge-title">Level Designer</div><div class="role-badge-sub">Layouts, Blockouts &amp; Flow</div></div><div class="role-badge"><div class="role-badge-title">Narrative Designer</div><div class="role-badge-sub">Story Structure &amp; World-Building</div></div><div class="role-badge"><div class="role-badge-title">Writer</div><div class="role-badge-sub">Dialogue, Fiction &amp; Lore</div></div></div>
+    </div>
+  </div>
+  <div class="about-favgames" id="about-favgames-el"><div class="about-favgames-label">Favorite Games</div><div class="about-favgames-grid"><div class="about-favgame"><div class="about-favgame-thumb fit-contain"><img src="images/about/favorite-games/bravely-default.jpg" alt="Bravely Default" loading="lazy"></div><div class="about-favgame-title">Bravely Default</div></div><div class="about-favgame"><div class="about-favgame-thumb fit-contain"><img src="images/about/favorite-games/dungeons-and-dragons.jpg" alt="Dungeons &amp; Dragons" loading="lazy"></div><div class="about-favgame-title">Dungeons &amp; Dragons</div></div><div class="about-favgame"><div class="about-favgame-thumb fit-contain"><img src="images/about/favorite-games/pokemon-black.jpg" alt="Pokémon Black" loading="lazy"></div><div class="about-favgame-title">Pokémon Black</div></div><div class="about-favgame"><div class="about-favgame-thumb fit-contain"><img src="images/about/favorite-games/citizen-sleeper.jpg" alt="Citizen Sleeper" loading="lazy"></div><div class="about-favgame-title">Citizen Sleeper</div></div></div></div>
+</section><section id="contact"><!-- Closing tagline, email, and social links -->
+  <div class="sec-eyebrow">// Send a Raven</div>
+  <h2 class="sec-heading">Get In Touch</h2>
+  <div class="contact-box">
+    <p class="contact-tagline" id="contact-tagline-el">Looking to collaborate, hire, or just talk shop about games, stories, and the worlds between? My raven is always in flight.</p>
+    <a class="contact-email" id="contact-email-el" href="mailto:rsarlatte421@gmail.com">rsarlatte421@gmail.com</a>
+    <div class="contact-links" id="contact-links-el"><a href="https://www.linkedin.com/in/ray-sarlatte421/" class="social-btn" target="_blank">💼 LinkedIn</a><a href="mailto:rsarlatte421@gmail.com" class="social-btn" target="_blank">✉ Email</a></div>
+  </div>
+</section><footer><span id="footer-el">· Ray Sarlatte · Game Designer · Narrative Designer · Writer ·</span></footer></div><!-- /page-home -->
+
+<!-- ═══ PROJECT DETAIL PAGE ═══
+     Static markup below is just a snapshot of whichever project was last
+     viewed before this file was saved/exported — renderProjectDetail(idx)
+     in the JS completely rebuilds everything inside #proj-detail-content
+     from data.projects[idx] every time a project card is clicked, so this
+     content is overwritten immediately on page load/navigation. -->
+<div id="page-project" class="page">
+  <div class="proj-detail" id="proj-detail-content">
+    <div class="pd-header-row">
+      <div class="pd-back" onclick="showPage('home');scrollToSection('projects')">← Back to Projects</div>
+      
+    </div>
+    <div class="pd-eyebrow">D&amp;D 5E · Homebrew TTRPG Campaign</div>
+    <h1 class="pd-title">Eusedia</h1>
+    <div class="pd-roles"><span class="pd-role-tag">Dungeon Master</span><span class="pd-role-tag">Narrative Designer</span><span class="pd-role-tag">World-Builder</span></div>
+    <!-- Type / Team / Date meta bar -->
+    <div class="pd-meta-bar">
+      <div class="pd-meta-item"><div class="pd-meta-label">Type</div><div class="pd-meta-val">D&amp;D 5E</div></div>
+      <div class="pd-meta-item"><div class="pd-meta-label">Team</div><div class="pd-meta-val">Solo DM</div></div>
+      <div class="pd-meta-item"><div class="pd-meta-label">Date</div><div class="pd-meta-val">July 2023 – May 2025</div></div>
+    </div>
+    <!-- Hero image, or a placeholder hint if none is set yet -->
+    <img class="pd-hero-img" src="images/eusedia/eusedia-hero.png" alt="Eusedia">
+    <div class="pd-section-head">Overview</div>
+    <div class="pd-body"><p><strong>Eusedia</strong> is a high-fantasy TTRPG setting steeped in myth and tragedy — yet much of its vast history has long been forgotten. The tales of major heroes have already been told: sung by bards, carved in stone, and buried beneath centuries of dust. But now, the stirrings of a second Cataclysm begin to shake the world once more.</p><p>*The gods are gone. The myths are buried. But fate has not yet finished writing.*</p><p>In this post-divine age, where the gods have been banished and ancient truths lie fractured, a motley crew of unknown adventurers touched by fate are brought together to uncover the growing darkness.</p><p><strong>Key Themes:</strong>
+- <strong>Forgotten History:</strong> Players uncover mythic truths buried under generations of silence
+- <strong>Fate-Touched Journeys:</strong> Ordinary people thrust into extraordinary roles by forces unseen
+- <strong>Post-Divine Epic:</strong> Magic lingers, gods are gone, but their shadows still shape the land
+- <strong>Rising Darkness:</strong> Whispers of a second Cataclysm spread</p></div>
+    <!-- Key Contributions, Tools & Skills, and Gallery are all optional — each only
+         renders if that data actually exists, so empty projects don't show blank headers -->
+    <div class="pd-section-head">Key Contributions</div><ul class="pd-highlights"><li>Led a 17-session tabletop RPG campaign focused on moral ambiguity and good vs. evil complexity</li><li>Developed custom mechanics for chase sequences and puzzle-solving to promote player agency</li><li>Managed extensive worldbuilding, lore, and session planning using Obsidian</li><li>Integrated character and rule content with D&amp;D Beyond for seamless session management</li></ul>
+    
+    
+    
+    <div class="pd-section-head">Tools &amp; Skills</div><div class="pd-tags"><span class="pd-tag">D&amp;D 5E</span><span class="pd-tag">World-Building</span><span class="pd-tag">Narrative Design</span><span class="pd-tag">Custom Mechanics</span><span class="pd-tag">Session Planning</span><span class="pd-tag">Obsidian</span><span class="pd-tag">Dungeon Master</span></div>
+    <div class="pd-section-head">Gallery</div><div class="pd-gallery"><figure><img src="images/eusedia/eusedia-obsidian-graph.png" alt="Obsidian Graph View — Campaign Notes &amp; Lore" loading="lazy"><figcaption>Obsidian Graph View — Campaign Notes &amp; Lore</figcaption></figure></div>
+    
+    
+    <!-- Play (label is editable per-project) and Source links -->
+    <div class="pd-links">
+      
+      
+    </div>
+    <!-- Prev/Next project navigation -->
+    <div class="pd-nav">
+      <div class="pd-nav-btn" onclick="renderProjectDetail(3);window.scrollTo(0,0)">← Celestial Bodies</div>
+      <div></div>
+    </div>
+  </div>
+</div>
+
+</main>
+</div><!-- /site-wrap -->
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// SECRET KEY COMBO STATE
+// ═══════════════════════════════════════════════════════════════
+// Declared early since renderProjectDetail() (defined further down, but only ever called
+// after the page has fully loaded) reads this flag to decide whether to render its
+// "Edit This Project" button in the revealed state.
+const editorControlsRevealed = false; // editor removed in public build
+
+// ═══════════════════════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════════════════════
+// The single source of truth for every piece of content on the page: hero
+// text, bio, skills, education, experience, projects (incl. full case-study
+// detail), writing entries, contact info, footer text, section order /
+// visibility, custom sections, and the entire color/font/effects palette.
+// Every render function below reads from this object, and every editor
+// field writes back into it. Exporting the file serializes this exact
+// object (with live edits applied) back into the downloaded copy.
+let data = {
+  "hero": {
+    "name": "Ray Sarlatte",
+    "eyebrow": "Portfolio — 2026",
+    "title": "Game Designer · Level Designer · Narrative Designer · Writer",
+    "tagline": "Hail and well met, fair traveler. I’m Ray — a storyteller, world-builder, and designer of games, levels, and the narratives that bring them to life.",
+    "cta": "View Resume",
+    "ctaUrl": "",
+    "navBrand": "R.S."
+  },
+  "about": {
+    "bio": "Thanks for taking a look around. Here’s a little bit about me! I’m a **Game Designer** & **Narrative Designer** currently based in California. I love interactive storytelling and creating gameplay moments that stick with players long after the screen fades to black. I’m honing my skills through solo projects and collaborative work to contribute to innovative, story-rich games.\n\nI have two bachelor’s degrees from the **University of Utah** — one in English and one in Game Design — which let me focus specifically on game-based narrative and level design. My background in writing and literature gives me a strong foundation for crafting and understanding what makes compelling characters, meaningful dialogue, and immersive environments that support player-driven storytelling.\n\nStorytelling has always been at the heart of who I am. Outside of design work, I run TTRPG campaigns for friends and family using systems like Dungeons & Dragons & Daggerheart and explore the mechanics of other tabletop RPGs in my spare time. I constantly stay engaged with narrative systems and game design from different angles, whether writing short stories, poems, worldbuilding for my own projects, or consuming a variety of books and media to better understand how professionals craft their stories. I’m always thinking about what it means to be a good storyteller and how I can improve those qualities in myself.\n\nAt the core of my design philosophy is a belief that the most powerful stories in games aren’t just told, they’re lived. Whether it’s the layout of a dungeon, a forgotten ruin tucked into the world, or the subtle emotional beats in a conversation, I strive to build experiences that reward curiosity and invite emotional investment. I want each player’s journey to feel personal and meaningful, because a story isn’t just what happens in games — player choices drive it.",
+    "roles": [
+      {
+        "title": "Game Designer",
+        "sub": "Mechanics, Systems & Balance"
+      },
+      {
+        "title": "Level Designer",
+        "sub": "Layouts, Blockouts & Flow"
+      },
+      {
+        "title": "Narrative Designer",
+        "sub": "Story Structure & World-Building"
+      },
+      {
+        "title": "Writer",
+        "sub": "Dialogue, Fiction & Lore"
+      }
+    ],
+    "socials": [
+      {
+        "label": "LinkedIn",
+        "url": "https://www.linkedin.com/in/ray-sarlatte421/",
+        "icon": "💼"
+      },
+      {
+        "label": "Email",
+        "url": "mailto:rsarlatte421@gmail.com",
+        "icon": "✉"
+      }
+    ],
+    "photoUrl": "images/about/profpic2026.jpg",
+    "favoriteGames": [
+      {
+        "title": "Bravely Default",
+        "url": "images/about/favorite-games/bravely-default.jpg",
+        "fit": "contain"
+      },
+      {
+        "title": "Dungeons & Dragons",
+        "url": "images/about/favorite-games/dungeons-and-dragons.jpg",
+        "fit": "contain"
+      },
+      {
+        "title": "Pokémon Black",
+        "url": "images/about/favorite-games/pokemon-black.jpg",
+        "fit": "contain"
+      },
+      {
+        "title": "Citizen Sleeper",
+        "url": "images/about/favorite-games/citizen-sleeper.jpg",
+        "fit": "contain"
+      }
+    ]
+  },
+  "skills": [
+    {
+      "category": "Design",
+      "items": [
+        "Level Design",
+        "Narrative Design",
+        "Puzzle Design",
+        "Card Game Design",
+        "Iterative Design",
+        "White Boxing",
+        "Playtesting"
+      ]
+    },
+    {
+      "category": "Writing",
+      "items": [
+        "Dialogue Writing",
+        "World-Building",
+        "Story Structure",
+        "Lore Design",
+        "Dungeon Mastering"
+      ]
+    },
+    {
+      "category": "Software",
+      "items": [
+        "Unreal Engine",
+        "Unity",
+        "GameMaker",
+        "Maya",
+        "Adobe Photoshop",
+        "Adobe Acrobat",
+        "Perforce",
+        "GitHub",
+        "Trello"
+      ]
+    },
+    {
+      "category": "Soft Skills",
+      "items": [
+        "Team Communication",
+        "Version Control",
+        "Iterative Design",
+        "Microsoft Office"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "school": "University of Utah",
+      "degree": "Two B.S. Degrees — English & Game Design",
+      "date": "2021 – 2026",
+      "desc": "Relevant Classes: Games Capstone, Level Design, Alternative Game Dev, Adv Video Game Storytelling, Traditional Game Dev, Intro to Game Design"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Best Buy — Geek Squad",
+      "role": "Consultation Agent",
+      "date": "Oct 2024 – Present",
+      "category": "Tech",
+      "desc": "Providing frontline technical support and client service.",
+      "highlights": [
+        "Manage work orders and ensure timely, accurate delivery of service",
+        "Coordinate with in-store and remote teams to maintain service quality"
+      ],
+      "tech": [
+        "Client Communication",
+        "Technical Support",
+        "Logistics"
+      ]
+    },
+    {
+      "company": "Dustbath Studios (Glocktopus)",
+      "role": "Lead Designer + Asst. Producer",
+      "date": "Nov 2025 – Present",
+      "category": "Games",
+      "desc": "Sole legal founder of the studio’s LLC, though built and run in the spirit of a co-founded studio with a 13-person capstone team; balanced Lead Designer duties with production and business operations for the team’s game, Glocktopus.",
+      "highlights": [
+        "Founded and legally established Dustbath Studios LLC, including the business bank account and Steam/Steamworks store page",
+        "Led level design across five environments, from whitebox blockouts through dressed, playable levels with documented puzzle flows",
+        "Built and maintained the team’s Design Documentation Hub and Microsoft Loop task-assignment system to keep a 13-person team organized",
+        "Balanced Lead Designer responsibilities with Assistant Producer duties across the full production cycle"
+      ],
+      "tech": [
+        "Team Leadership",
+        "Production",
+        "Documentation",
+        "Microsoft Loop",
+        "Steam Publishing",
+        "Level Design",
+        "Puzzle Design",
+        "QA & Playtesting",
+        "Perforce",
+        "Unreal Engine",
+        "Live Ops"
+      ]
+    },
+    {
+      "company": "Best Buy — Geek Squad",
+      "role": "Advanced Repair Agent",
+      "date": "Jan 2026 – Present",
+      "category": "Tech",
+      "desc": "Diagnose and repair computers, devices, and consumer electronics for customers",
+      "highlights": [
+        "Perform hardware and software troubleshooting to resolve technical issues efficiently",
+        "Maintain accurate service records and repair documentation",
+        "Communicate repair solutions and recommendations to customers in a professional manner",
+        "Collaborate with team members to ensure high-quality service and customer satisfaction"
+      ],
+      "tech": [
+        "Client Communication",
+        "Technical Support",
+        "Logistics",
+        "Hardware Repair",
+        "Software Repair",
+        "Virus Removal",
+        "Data Transfer"
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "title": "Glocktopus",
+      "roles": [
+        "Lead Designer",
+        "Assistant Producer"
+      ],
+      "type": "Unreal Engine · Multiplayer Puzzle-Stealth",
+      "team": "Capstone — Team of 13 (Dustbath Studios)",
+      "date": "Aug 2025 – May 2026",
+      "desc": "Shipped on Steam as a 13-person capstone production in Unreal Engine. As Lead Designer & Assistant Producer, I led level design across five environments, built and maintained the team’s design documentation hub, created Blueprint actors, applied & created materials for environment art, and managed production infrastructure including the team’s LLC, business bank account, Steam account, and Steamworks setup.",
+      "imageUrl": "images/glocktopus/main-capsule.png",
+      "liveUrl": "https://store.steampowered.com/app/4440410/GLOCKTOPUS/",
+      "liveLabel": "Play on Steam",
+      "sourceUrl": "",
+      "detail": {
+        "body": "**Glocktopus** is a multiplayer puzzle-stealth game in which players control a gun-wielding octopus navigating enemy-filled environments through stealth, misdirection, and creative puzzle solutions. Developed with a team of 13 over two capstone semesters, it shipped on Steam.\n\nAs **Lead Designer** & **Assistant Producer**, my work spanned design, production, environment art, Blueprint scripting, and QA through every phase of development, from the first tutorial-room blockout through Beta, Gold, and Live Ops.\n\nI built the team’s **Design Documentation Hub** from scratch, linked it to Microsoft Loop and Discord for team-wide access, added a formatting guideline for consistency, and maintained an update log for accountability. I also created detailed design entries for all five levels: Entrance Hall, Tropical River, Ocean, Forest, and the Vertical Slice. Each entry included the room’s purpose, layout overviews, comprehensive asset lists with items that are currently implemented in the project and those still needed, interaction beats, and puzzle flows.\n\n**Level Design** was my largest single contribution. Starting with the Tutorial Room, I produced whitebox and colored blockouts that iterated toward final layouts. I led the team’s vertical-slice brainstorming session. I turned the collaborative sketch into a detailed isometric layout marking key interactions and event triggers, and later documented it with visual progression screenshots. I designed Level 2’s Snapping Turtle guard-patrol puzzle. I rebuilt and expanded the Entrance Hall (Level 4). I converted Level 3 from blockout to a dressed, playable level.\n\nI contributed to **environment art** by creating materials using textures from our art team, including triplanar-projected walls, floors, and sand sections; custom signage using artist-made 2D textures; and glass materials. I also modeled static meshes, including Stingray touchpool floor and wall assets, Entrance Hall geometry, and a floor mesh to fix physics clipping, and populated every level with foliage, aquatic plants, fish and jellyfish Blueprint instances on spline paths, bubble VFX, and lighting.\n\nOn the **Blueprint scripting** side, I built and shipped several actors: BP_Box (pushable object tutorial, later tuned for physics feel), BP_VentCover (collision-modified level exit), and BP_Jellyfish (configurable rotating actor with designer-exposed mesh and material variables, later extended by engineers to react to player gunfire. I also implemented BP_GoToNextLevel transition triggers, an on-rail camera system in the Ocean Level, puzzle cameras in the Entrance Hall, and a fix for a wall-climbing spline rotation bug that appeared in multiple levels. I kept the project organized by restructuring level Outliners and the Content Browser as the project scaled.\n\nAs **Assistant Producer**, I set up the team’s LLC through UtahID and established the business bank account, created the company email, Steam, and Steamworks accounts, built and submitted the store page for review, maintained the Loop issue-triage board, and pushed patch updates with community-voice patch notes during Live Ops.",
+        "highlights": [
+          "Led level design across five level environments (Entrance Hall, Tropical River, Ocean, Forest, Vertical Slice) — from whitebox blockouts and isometric layout sketches through dressed, playable levels with documented interaction and puzzle flows.",
+          "Built and maintained the team’s Design Documentation Hub — formatting guidelines, update log, per-level templates, Puzzle Design doc (complexity ratings + synergy examples), Audio SFX list, and Loop task assignments",
+          "Shipped Blueprint actors BP_Box, BP_VentCover, and BP_Jellyfish; implemented level-transition triggers, an on-rail Ocean camera, and Entrance Hall puzzle cameras; fixed spline, collision, and physics-clipping bugs",
+          "Created hands-on environment art: custom materials (sand, triplanar, signage, glass), modeled static meshes, and dressed levels with foliage, spline-driven fish/jellyfish, bubble VFX, and lighting",
+          "Served as a lead internal playtester — ran a 6+ hour Discord testing marathon during Sprint 5, captured commentary bug-report videos, and verified engineering fixes against design intent.",
+          "Managed production: set up the LLC and business bank account, Steam/Steamworks accounts and store page, maintained the Loop issue-triage board, and pushed Live Ops patches with community-voice patch notes.",
+          "Cut the under-construction level late to hit the release date — scoped as a candidate for a future update."
+        ],
+        "origin": "**Glocktopus** began as a capstone reference-game project, where the team built around a core multiplayer puzzle-stealth concept. The game was heavily inspired by **Untitled Goose Game** & **Octodad**. The design goal was to create an experience in which stealth, misdirection, and environmental puzzles worked cohesively to enhance the intended experience of creative puzzle-solving and comedic environmental interactions.\n\nMy role as **Lead Designer** meant I was involved in shaping that vision from day one: establishing how puzzle complexity should be structured, how levels should guide player attention without explicit direction, and how documentation could keep a 13-person team aligned across two full semesters of parallel development.",
+        "challenges": "**Scope creep** was the project’s most persistent challenge. Every sprint introduced features that sounded valuable in isolation but added engineering complexity or diluted the game’s identity. Managing it meant actively trimming the puzzle toolset early — cutting overly ambitious tools (glider/umbrella, shovel, Tommy gun) to keep the focus on NPC-driven puzzle design — and pushing back during design reviews rather than assuming scope would manage itself. Late in production, the under-construction level was cut entirely to protect the release date.\n\n**Version control conflicts** caused the Tropical River level to need a complete rebuild from scratch mid-production; I duplicated and restored it as a new version and continued the work there. An Unreal static-mesh save bug at one point also blocked committing changes to the repo — the kind of pipeline friction that reinforced the value of disciplined Perforce hygiene and Outliner/folder organization, which I took on across every level I touched.\n\n**Technical self-sufficiency** was a personal limitation early on. I could identify bugs in-engine but was initially hesitant to fix them for fear of breaking engineers’ systems — at one point I modified BP_Clam’s collision, then reverted my changes to stay out of the engineers’ way. Taking Intro to Unreal Scripting concurrently gave me enough Blueprint fluency to become meaningfully self-sufficient in the second half of production: building actors, tuning physics, fixing splines, and implementing cameras without blocking the engineering team.\n\n**Narrative integration** suffered from late scoping. The in-game comics and story materials were assigned too far into production, leaving insufficient time for revision and making the narrative feel underdeveloped relative to the rest of the game.",
+        "retrospective": "**Design for modularity from the start.** Both the asset pipeline and puzzle design philosophy needed modular thinking earlier. Non-modular puzzles and one-off meshes created compounding workloads — every level required custom solutions instead of drawing from a shared toolkit. A smaller set of reusable puzzle components and standardized modular assets would have reduced engineering burden, simplified tutorialization, and enabled faster iteration in later sprints.\n\n**Lock narrative deliverables earlier.** The in-game comics and story materials were scoped too late, leaving our 2D artists without a full production runway. A hard deadline, even just for sketches of all required comics in the first two sprints, would have given us time for revisions and made the narrative feel more genuinely integrated into gameplay, as artists would have been able to flex into other tasks with the extra time gained.\n\n**Apply a stricter ‘does this serve the experience?’ filter at every design review.** Asking that question explicitly and consistently — not just when things got too complex to implement — would have produced a smaller, more cohesive feature set with more polish time per system.\n\n**Learn Blueprints well enough to be self-sufficient from day one.** The time I spent unable to fix minor engine issues myself slowed iteration and added unnecessary pressure on the engineering team. Blueprint fluency as a designer isn’t optional — it’s what lets you communicate precisely, test independently, and stay unblocked.",
+        "tags": [
+          "Unreal Engine",
+          "Level Design",
+          "Blueprint Scripting",
+          "Environment Art",
+          "Puzzle Design",
+          "Camera Design",
+          "GDD",
+          "QA & Playtesting",
+          "Perforce",
+          "Production",
+          "Steam / Steamworks",
+          "Team Capstone"
+        ],
+        "gallery": [
+          "images/glocktopus/level1isolayout.png",
+          "images/glocktopus/level1blockout.png",
+          "images/glocktopus/underconstructionlevellayoutbrainstorm.png",
+          "images/glocktopus/underconstructionlevellayoutiso.png",
+          "images/glocktopus/gold1leveldesignbefore.png",
+          "images/glocktopus/gold1leveldesignafter.png",
+          "images/glocktopus/gold1splinefixes.png",
+          "images/glocktopus/gold1turtlestandee.png",
+          "images/glocktopus/gold2photo1.png",
+          "images/glocktopus/gold2photo2.png",
+          "images/glocktopus/gold2trlevelphoto.png",
+          "images/glocktopus/gold2forestlevelphoto.png",
+          "images/glocktopus/gold2materialphoto1.png",
+          "images/glocktopus/gold2materialphoto2.png",
+          "images/glocktopus/gold2bpventcoverphoto.png",
+          "images/glocktopus/orangeoutlineonpipe.png",
+          "images/glocktopus/cameraadjustmentsbeta1.png",
+          "images/glocktopus/finalspprintentrancehallenvironment1.png",
+          "images/glocktopus/finalspprintentrancehallenvironment2.png",
+          "images/glocktopus/finalspprintentrancehallenvironment3.png",
+          "images/glocktopus/finalspprintentrancehallenvironment4.png",
+          "images/glocktopus/finalsprintnewtanklayoutphoto.png",
+          "images/glocktopus/finalsprintjellyfish-fishplacementphoto.png",
+          "images/glocktopus/finalsprintleveltransitionphoto.png",
+          "images/glocktopus/finalsprintbeforematerialfixesphoto.png",
+          "images/glocktopus/finalsprintaftermaterialfixesphoto.png",
+          "images/glocktopus/finalsprintmaterialissuepuddles.png",
+          "images/glocktopus/finalsprintnewfloorclippingfixphoto.png",
+          "images/glocktopus/finalsprintforestlevelphoto1.png",
+          "images/glocktopus/finalsprintforestlevelphoto2.png",
+          "images/glocktopus/finalsprintblueprintgraphjellyfishphoto.png"
+        ],
+        "backgrounds": [],
+        "environmentAssets": []
+      }
+    },
+    {
+      "title": "PolyHue",
+      "roles": [
+        "Solo Designer"
+      ],
+      "type": "Print-and-Play · Strategic Boss Rush Card Game",
+      "team": "Solo Project",
+      "date": "Oct – Dec 2024",
+      "desc": "Designed a tactical card game where players lead a team of adventurers to defeat rotating Boss Monsters. Emphasized strategic planning, resource management, and adaptability in gameplay.",
+      "imageUrl": "images/polyhue/hero.jpg",
+      "liveUrl": "https://alternisray.itch.io/polyhueprototype",
+      "liveLabel": "Play on Itch.io",
+      "sourceUrl": "",
+      "detail": {
+        "body": "In **PolyHue**, you lead a daring party of adventurers, represented by powerful Class Cards and equipped with magical gear called Enhancements. Your mission: to defeat formidable Boss Monsters. Each Boss presents unique Rune requirements and potent effects that challenge your strategy and resource management. Only the most adaptable players will outmaneuver the Bosses and claim victory.\n\nWhile this prototype is complete in its print & play state, I am currently in the process of converting the game to a **single-player rogue-lite deckbuilding dungeon crawler** that blends strategic card-based combat with fast-paced, run-based progression. Inspired by For the King, Slay the Spire, and Hades.\n\n** *This page will be updated as the video game version development progresses.* **",
+        "highlights": [
+          "Designed the complete card game system: classes, enhancements, boss mechanics, and rune interactions",
+          "Balanced resource economy to reward adaptive strategic planning over brute-force builds",
+          "Created print-and-play layout and all card art/graphic design",
+          "Currently redesigning into a digital rogue-lite deckbuilder with procedural progression"
+        ],
+        "origin": "**PolyHue** was inspired by a card game my friend is currently developing, called ** Schmoing **, which I advised in its early stages.\n\nI then continued developing the game as part of a class assignment to create a print-and-play game that reinforced the development of mechanics we learned in class.\n\nMore than anything, I was inspired by the idea of a card-based boss-rush game, since I had never really heard of or played anything similar.",
+        "challenges": "In development, the main issues I ran into were power scaling for character abilities and balancing win conditions with the resources available to the player. \n\nFor the win conditions, I determined rune values for an Enhancement or a Boss Monster based on the level of difficulty I wanted to express, then playtested extensively with those values and adjusted them to better suit the play experience I wanted to achieve. The difficulty with this was that, for the assignment, we were given a time frame to complete our game, and because I am a very analytical player when it comes to strategy games, I would always go over time. So I brought in external playtesters, which helped tremendously, and their feedback led to some of the most helpful changes I made to the game.\n\nWith character abilities, I still think they ended up a bit too powerful in the final version, but that’s probably because I was designing them more as a prototype for the video game version I wanted to make. Making the Class Cards ‘unlock’ new powers over time would have increased the game length too much. It also would have made the game too complex for the print-and-play experience I was crafting at the time.",
+        "retrospective": "**I learned that playtesting early and often is essential to game development.** The more people with different play styles you can get to play your game, the better feedback you will receive. Additionally, you don’t have to accept all feedback as law — rather, you should consider why the feedback occurred and how you can change the game’s mechanics to better reflect the intended play experience.\n\n**Design the power curve from day one, not as an afterthought.** If I revisited PolyHue today, I’d build a tiered unlock system for Class Card abilities rather than giving players full power upfront. At the time, a full print-and-play session already felt long enough that I didn’t want to add the complexity — but that decision is exactly why the final abilities feel a bit stronger than I’d like. The workaround avoided the real problem instead of solving it. A slower power ramp would require a longer session length, but it would make the strategic tension the game is built around last the whole way through, rather than the strongest plays being available immediately.\n\n**Set harder constraints for myself earlier, not just for the game.** I went over my own timeline more than once because I wanted to fully solve balance problems analytically before testing them. Bringing in outside playtesters earlier — rather than after I’d already spent significant time hand-tuning numbers by myself — would have gotten me to the same answers faster, with less rework along the way. I’ve carried that habit into later projects: get a rough version in front of real players sooner, even if it isn’t the version you’d want them to see yet.",
+        "tags": [
+          "Card Game Design",
+          "Game Design",
+          "Solo Project",
+          "Print & Play",
+          "Balance",
+          "Rogue-lite"
+        ],
+        "gallery": [
+          "images/polyhue/classcards.png",
+          "images/polyhue/enhancements1.png",
+          "images/polyhue/enhancements2.png",
+          "images/polyhue/abilities1.png",
+          "images/polyhue/abilities2.png",
+          "images/polyhue/bossmonsters1.png",
+          "images/polyhue/bossmonsters2.png"
+        ],
+        "backgrounds": [],
+        "environmentAssets": []
+      }
+    },
+    {
+      "title": "Eldritch Confection",
+      "roles": [
+        "Narrative Designer",
+        "Level Designer",
+        "Producer",
+        "Environment Artist"
+      ],
+      "type": "Unity · 2D Side-Scroller Beat 'em Up",
+      "team": "Team of 5 (Team Teeth Thieves)",
+      "date": "May – Aug 2024",
+      "desc": "Designed and prototyped game sections focused on cohesive visuals and progressive difficulty. Created and balanced enemy types through playtesting. Integrated narrative elements through environmental storytelling and visual context.",
+      "imageUrl": "images/eldritch-confection/ec-hero.png",
+      "liveUrl": "https://alternisray.itch.io/eldritch-confection",
+      "liveLabel": "Play on Itch.io",
+      "sourceUrl": "",
+      "detail": {
+        "body": "**Eldritch Confection** is a 2D side-scroller beat 'em up in which Cu, a young Eldritch God, eats their way through a Candyland torn by civil war.\n\nI designed and prototyped each section of the game, placing and organizing all assets directly in the level editor and working closely with engineers to get the prefabs and features I needed to build levels that matched our intended play experience. Due to the project’s short time frame, I chose to focus primarily on **aesthetics and on how the different sections connected** as they progressively increased in difficulty. I came up with distinct enemy types for each area and playtested various enemy counts in each area until the challenge aligned with the team’s vision for the game’s overall feel.\n\nAs producer, I created and ran the team’s **Notion board** from scratch, handling task creation and assignment myself to keep it aligned with the work the team completed week to week.\n\nFrom a narrative standpoint, I relied heavily on **environmental storytelling**, letting the backgrounds and brief dialogue carry much of the narrative weight. Our main focus was integrating enemy types with the player’s abilities, so each design choice had a clear artistic and logical thread supporting both gameplay and worldbuilding.",
+        "highlights": [
+          "Designed and prototyped all game sections with progressive difficulty scaling",
+          "Placed and organized all level assets directly in the editor, coordinating with engineers to secure the prefabs and features needed to realize the game’s intended play experience",
+          "Created and balanced distinct enemy types through iterative playtesting",
+          "Integrated narrative through environmental storytelling and visual context",
+          "Created and single-handedly managed the team’s Notion board, keeping task creation and assignment consistent with actual production progress throughout the project",
+          "Served as producer: coordinated team workflow and managed project scope within the timeline"
+        ],
+        "origin": "**Eldritch Confection** came from merging two separate pitches. I had been developing a concept for an eldritch monster game in which the creature grew stronger by eating the things it encountered — that mechanic became the core of Cu, the game’s protagonist. A teammate independently pitched a candy-themed beat 'em up heavily inspired by **Castle Crashers.** The two ideas fit together naturally: a ravenous young Eldritch God devouring their way through a candy-coated world torn by civil war gave us a hook that was both mechanically clear — eating equals power — and visually distinct from a typical beat 'em up.",
+        "challenges": "**Losing one of our two dedicated artists.** Partway through the semester, one of our two designated artists dropped the class with no warning and no communication, leaving Gwen as the team’s only consistent art contributor for the rest of production. To keep the pipeline moving, I picked up a significant amount of the art workload on top of my Producer and Designer responsibilities — effectively becoming a third artist on a team that had only budgeted for two. That shift wasn’t the original plan; it was a direct response to losing a teammate mid-project, and it’s the reason the game credits me across Producer, Designer, and Artist rather than just the first two.\n\nThat change had ripple effects on the art pipeline itself. With fewer hands producing art alongside everything else I was managing, assets ended up arriving in uneven batches rather than a steady stream — something a teammate flagged directly in our end-of-project retrospective. In hindsight, a more resilient pipeline with clearer asset checklists and an earlier contingency plan for losing a team member would have smoothed that out, even without adding headcount back.\n\n**Enemy variety and combat feel.** I designed and balanced each enemy type through iterative playtesting within the time we had, but the final roster still leaned small enough that fights could start to feel repetitive over a full playthrough, and some enemies lacked reactable attack animations and more developed AI — both called out directly in our team’s final retrospective. With more time, I’d have prioritized a wider enemy variety and clearer attack telegraphing over further polishing the systems we’d already finished.\n\n**Team-wide deadline communication.** More broadly, the team agreed that clearer, more consistent deadlines would have kept everyone better aligned throughout production — something I identified in my own review as an area I could have driven harder on as producer.",
+        "retrospective": "**Build a more resilient pipeline, not just a leaner one.** Losing an artist mid-semester exposed how much our plan depended on both artists staying for the full project. If I revisited this today, I’d build in an earlier checkpoint to redistribute art tasks the moment a gap opens up, rather than absorbing the shortfall myself as it happened. Streamlining the art pipeline was the change I identified most clearly in our own team retrospective, and it’s the one I’d prioritize first.\n\n**Delegate sooner, not just more.** Because I was already covering Producer and Designer duties, quietly picking up art work felt like the path of least friction in the moment — but it also meant I wasn’t always communicating what I was doing outside my primary roles, which more than one teammate noted directly. Next time, I’d rather ask the team to explicitly reshuffle tasks than absorb a gap on my own without saying so.\n\n**Set firmer deadlines earlier.** Several of us independently landed on the same note: the project needed clearer, more consistent deadlines. As producer, that responsibility sat with me specifically, and it’s a lesson I’ve carried directly into how I structure timelines on later projects.",
+        "tags": [
+          "Unity",
+          "Level Design",
+          "Narrative Design",
+          "Environmental Storytelling",
+          "Enemy Design",
+          "Playtesting"
+        ],
+        "gallery": [
+          "images/eldritch-confection/eatingforpower.jpg",
+          "images/eldritch-confection/chargeattack.jpg",
+          "images/eldritch-confection/gummybearattack.jpg",
+          "images/eldritch-confection/gummyshield_power.jpg",
+          "images/eldritch-confection/bunnyambush.jpg"
+        ],
+        "backgrounds": [
+          {
+            "label": "Gum Drop Meadows",
+            "url": "images/eldritch-confection/backgrounds/gumdrop-meadows.jpg"
+          },
+          {
+            "label": "Candy Blossom Forest",
+            "url": "images/eldritch-confection/backgrounds/candy-blossom-forest.jpg"
+          },
+          {
+            "label": "Chocolate Mudlands",
+            "url": "images/eldritch-confection/backgrounds/chocolate-mudlands.jpg"
+          },
+          {
+            "label": "Rock Candy Wastes",
+            "url": "images/eldritch-confection/backgrounds/rock-candy-wastes.jpg"
+          }
+        ],
+        "environmentAssets": [
+          {
+            "category": "Crystal & Rock Formations",
+            "label": "Green Crystal Cluster",
+            "url": "images/eldritch-confection/environment-assets/crystal-1.png"
+          },
+          {
+            "category": "Crystal & Rock Formations",
+            "label": "Blue-Violet Crystal Cluster",
+            "url": "images/eldritch-confection/environment-assets/crystal-5.png"
+          },
+          {
+            "category": "Crystal & Rock Formations",
+            "label": "Purple Crystal Cluster",
+            "url": "images/eldritch-confection/environment-assets/crystal-7.png"
+          },
+          {
+            "category": "Crystal & Rock Formations",
+            "label": "Pink Crystal Cluster",
+            "url": "images/eldritch-confection/environment-assets/crystal-8.png"
+          },
+          {
+            "category": "Crystal & Rock Formations",
+            "label": "Cyan Crystal Cluster",
+            "url": "images/eldritch-confection/environment-assets/crystal-11.png"
+          },
+          {
+            "category": "Crystal & Rock Formations",
+            "label": "Pink Crystal Column",
+            "url": "images/eldritch-confection/environment-assets/crystal-3.png"
+          },
+          {
+            "category": "Crystal & Rock Formations",
+            "label": "Tan Crystal Column",
+            "url": "images/eldritch-confection/environment-assets/crystal-10.png"
+          },
+          {
+            "category": "Crystal & Rock Formations",
+            "label": "Teal Gem Cubes",
+            "url": "images/eldritch-confection/environment-assets/crystal-4.png"
+          },
+          {
+            "category": "Crystal & Rock Formations",
+            "label": "Purple Gem Cubes",
+            "url": "images/eldritch-confection/environment-assets/crystal-9.png"
+          },
+          {
+            "category": "Crystal & Rock Formations",
+            "label": "Gold Rock Cluster",
+            "url": "images/eldritch-confection/environment-assets/crystal-2.png"
+          },
+          {
+            "category": "Crystal & Rock Formations",
+            "label": "Pale Blue Rock Cluster",
+            "url": "images/eldritch-confection/environment-assets/crystal-6.png"
+          },
+          {
+            "category": "Crystal & Rock Formations",
+            "label": "Green Rock Cluster",
+            "url": "images/eldritch-confection/environment-assets/crystal-12.png"
+          },
+          {
+            "category": "Crystal & Rock Formations",
+            "label": "Purple Rock Formation",
+            "url": "images/eldritch-confection/environment-assets/G-rock-P.png"
+          },
+          {
+            "category": "Crystal & Rock Formations",
+            "label": "Red Rock Formation",
+            "url": "images/eldritch-confection/environment-assets/G-rock-R.png"
+          },
+          {
+            "category": "Crystal & Rock Formations",
+            "label": "Yellow Rock Formation",
+            "url": "images/eldritch-confection/environment-assets/G-rock-Y.png"
+          },
+          {
+            "category": "Crystal & Rock Formations",
+            "label": "Blue Rock Formation",
+            "url": "images/eldritch-confection/environment-assets/G-rock-B.png"
+          },
+          {
+            "category": "Crystal & Rock Formations",
+            "label": "Green Rock Formation",
+            "url": "images/eldritch-confection/environment-assets/G-rock-G.png"
+          },
+          {
+            "category": "Trees & Foliage",
+            "label": "Bare Tree — Variant 1",
+            "url": "images/eldritch-confection/environment-assets/BattleTree1.png"
+          },
+          {
+            "category": "Trees & Foliage",
+            "label": "Bare Tree — Variant 2",
+            "url": "images/eldritch-confection/environment-assets/BattleTree2.png"
+          },
+          {
+            "category": "Trees & Foliage",
+            "label": "Flowering Forest Bush",
+            "url": "images/eldritch-confection/environment-assets/ForestBush.png"
+          },
+          {
+            "category": "Trees & Foliage",
+            "label": "Purple Grass Clump — Variant 1",
+            "url": "images/eldritch-confection/environment-assets/ForestGrass.png"
+          },
+          {
+            "category": "Trees & Foliage",
+            "label": "Purple Grass Clump — Variant 2",
+            "url": "images/eldritch-confection/environment-assets/ForestGrass2.png"
+          },
+          {
+            "category": "Candy Cane Props",
+            "label": "Candy Cane & Bush — Variant 1",
+            "url": "images/eldritch-confection/environment-assets/CcBush1.png"
+          },
+          {
+            "category": "Candy Cane Props",
+            "label": "Candy Cane & Bush — Variant 2",
+            "url": "images/eldritch-confection/environment-assets/CcBush2.png"
+          },
+          {
+            "category": "Candy Cane Props",
+            "label": "Candy Cane & Grass",
+            "url": "images/eldritch-confection/environment-assets/CcGrass.png"
+          },
+          {
+            "category": "Chocolate Puddles",
+            "label": "Chocolate Puddle — Variant 1",
+            "url": "images/eldritch-confection/environment-assets/puddle-1.png"
+          },
+          {
+            "category": "Chocolate Puddles",
+            "label": "Chocolate Puddle — Variant 2",
+            "url": "images/eldritch-confection/environment-assets/puddle-2.png"
+          },
+          {
+            "category": "Chocolate Puddles",
+            "label": "Chocolate Puddle — Variant 3",
+            "url": "images/eldritch-confection/environment-assets/puddle-3.png"
+          },
+          {
+            "category": "Structures",
+            "label": "Camp Tent",
+            "url": "images/eldritch-confection/environment-assets/CampSceneTent.png"
+          }
+        ]
+      }
+    },
+    {
+      "title": "Celestial Bodies",
+      "roles": [
+        "Narrative Designer",
+        "Dialogue Writer",
+        "Card Designer"
+      ],
+      "type": "GameMaker · Narrative Card Battler RPG",
+      "team": "Team of 4 (Frogs with Hats)",
+      "date": "Jan – Apr 2024",
+      "desc": "Planned and structured in-game events to align narrative pacing with storytelling goals. Wrote and edited dialogue for consistency in voice, theme, and emotional impact. Created card art maintaining visual cohesion with the established style guide.",
+      "imageUrl": "images/celestial-bodies/cb-hero.png",
+      "liveUrl": "https://ghostlord79.itch.io/celestial-bodies",
+      "liveLabel": "Play on Itch.io",
+      "sourceUrl": "",
+      "detail": {
+        "body": "**Celestial Bodies** is a strategic card battler RPG set in the modern day that has you playing as a person dealing with a chronic illness and the day-to-day challenges that come with it.\n\nMy primary role on this project was as a **narrative designer**, shaping the game’s overarching narrative and the sequence and timing of in-game events to ensure they aligned with the intended tone and storytelling goals.\n\nIn a secondary role, I served as both **dialogue writer and editor**, writing the majority of the game’s dialogue and thoroughly editing the remaining lines to maintain consistency in tone, theme, and emotional resonance within each scene and its environment. This includes implementation in-engine.\n\nI also enhanced the game’s visual identity by creating **card art**, designing the **world map**, and animating the credits animation for our team name, **Frogs with Hats**. These visual elements were carefully crafted to remain consistent with our **style guide** and to support a cohesive and memorable presentation.",
+        "highlights": [
+          "Planned and structured in-game event sequence to align narrative pacing with emotional arc",
+          "Wrote the majority of in-game dialogue; edited all remaining lines for consistency in voice and tone",
+          "Created card art consistent with the project’s established visual style guide",
+          "Collaborated with a team of 4 to blend card battle mechanics with a grounded, personal narrative",
+          "Wrote small easter eggs into select dialogue interactions for attentive players to find"
+        ],
+        "origin": "**Celestial Bodies** originated as a project for my **Alternative Game Development** class, where the assignment challenged us to design a game throughout the semester that expressed a more serious theme or reality of the world we live in, specifically through its **mechanics** and **story**.\nThe inspiration for the game came from the **Spoon Theory** for chronic illness—a well-known metaphor that explains the daily realities of living with chronic illness or pain. Coined by **Christine Miserandino** in 2003, it describes an individual’s daily energy reserves as a limited number of metaphorical “**spoons**.”\n\nOur goal was to create a game where every single action felt like it cost you something, and even normal, everyday tasks felt like **battles**.\n\nWe achieved this by ensuring that, mechanically, every action—whether moving on the **map** or playing **cards** in **battle**—consumed some of your **Energy** or **HP**. The story centers on a protagonist who receives magical **tarot cards** from a mysterious **wizard** at the local tarot shop, transforming everyday tasks into battles to overcome. This narrative and mechanical design worked together to convey the core themes.\n\nThe decision to make the game a **card battler** stemmed from a genuine personal fondness for the genre and a shared curiosity between myself and our engineer to see if we could create something fun in **GameMaker**, the engine required for the project.\n\nThe **core gameplay loop** puts this directly into practice: each day, you work through a list of daily tasks, and some of those are **Monstrous Tasks**—full card battles standing in for the tasks that feel like a fight just to get through. Surviving all of them lets you sleep and eat to advance to the next day and recover some of your spent **Energy**, but never all of it, mirroring how those living with chronic pain or illness often don’t regain the same amount of energy from rest and recovery that others do.",
+        "challenges": "**Asset scope versus engine familiarity.** Because GameMaker was new to most of the team, a handful of planned animations and art pieces couldn’t be finished in-house within our timeline. Rather than cut the moments they supported entirely, we supplemented them with free assets to keep those scenes intact.",
+        "retrospective": "Weekly meetings are essential for keeping the whole team aligned and for clearly assigning tasks to one another; using dedicated task-management software made a real difference for accountability and documentation.\n\nTaking the time to learn the engine before development begins is vital, and it’s better to learn from community posts than to re-invent the wheel.\n\nCohesion beats originality, and it’s important to keep every teammate familiar with where things stand in-engine.\n\nConciseness makes things easier to re-use, and it’s worth making sure a tutorial is actually finished before you start coding from it — he’d often find tutorials online that turned out to be incomplete partway through.",
+        "tags": [
+          "GameMaker",
+          "Narrative Design",
+          "Dialogue Writing",
+          "Card Design",
+          "Chronic Illness Themes",
+          "Team Project"
+        ],
+        "gallery": [
+          "images/celestial-bodies/cb-battle.png",
+          "images/celestial-bodies/cb-shop.png",
+          "images/celestial-bodies/cb-map.png"
+        ],
+        "backgrounds": [],
+        "environmentAssets": []
+      }
+    },
+    {
+      "title": "Eusedia",
+      "roles": [
+        "Dungeon Master",
+        "Narrative Designer",
+        "World-Builder"
+      ],
+      "type": "D&D 5E · Homebrew TTRPG Campaign",
+      "team": "Solo DM",
+      "date": "July 2023 – May 2025",
+      "desc": "Led a 17-session homebrew D&D campaign in an original high-fantasy world. Developed custom mechanics, extensive lore, and session planning. Themes of moral ambiguity and post-divine tragedy.",
+      "imageUrl": "images/eusedia/eusedia-hero.png",
+      "liveUrl": "",
+      "liveLabel": "Play on Itch.io",
+      "sourceUrl": "",
+      "detail": {
+        "body": "**Eusedia** is a high-fantasy TTRPG setting steeped in myth and tragedy — yet much of its vast history has long been forgotten. The tales of major heroes have already been told: sung by bards, carved in stone, and buried beneath centuries of dust. But now, the stirrings of a second Cataclysm begin to shake the world once more.\n\n*The gods are gone. The myths are buried. But fate has not yet finished writing.*\n\nIn this post-divine age, where the gods have been banished and ancient truths lie fractured, a motley crew of unknown adventurers touched by fate are brought together to uncover the growing darkness.\n\n**Key Themes:**\n- **Forgotten History:** Players uncover mythic truths buried under generations of silence\n- **Fate-Touched Journeys:** Ordinary people thrust into extraordinary roles by forces unseen\n- **Post-Divine Epic:** Magic lingers, gods are gone, but their shadows still shape the land\n- **Rising Darkness:** Whispers of a second Cataclysm spread",
+        "highlights": [
+          "Led a 17-session tabletop RPG campaign focused on moral ambiguity and good vs. evil complexity",
+          "Developed custom mechanics for chase sequences and puzzle-solving to promote player agency",
+          "Managed extensive worldbuilding, lore, and session planning using Obsidian",
+          "Integrated character and rule content with D&D Beyond for seamless session management"
+        ],
+        "origin": "",
+        "challenges": "",
+        "retrospective": "",
+        "tags": [
+          "D&D 5E",
+          "World-Building",
+          "Narrative Design",
+          "Custom Mechanics",
+          "Session Planning",
+          "Obsidian",
+          "Dungeon Master"
+        ],
+        "gallery": [
+          "images/eusedia/eusedia-obsidian-graph.png"
+        ],
+        "backgrounds": [],
+        "environmentAssets": []
+      }
+    }
+  ],
+  "writing": [
+    {
+      "title": "Aris’s Loop",
+      "meta": "Short Story · 4,602 words",
+      "desc": "A piece set in the past of the D&D campaign world of Eusedia, recounting the final moments of a civilization through the eyes of the person who unknowingly caused its destruction.",
+      "url": "https://drive.google.com/file/d/1s9YmuO3cRndI1quxSLUkS7Uy-V2nEQlt/view?usp=sharing"
+    },
+    {
+      "title": "Gamebook",
+      "meta": "Fighting Fantasy-Style Gamebook · 35,180 words",
+      "desc": "Inspired by the Epic of Gilgamesh — an exercise in matching player choice to compelling narrative while building an engaging game system.",
+      "url": "https://drive.google.com/file/d/1W9rUIwz6Z-DqgBLzA3mGALbu6R2Y7NFg/view?usp=sharing"
+    },
+    {
+      "title": "Five Minutes",
+      "meta": "Short Story · 1,593 words",
+      "desc": "Broken into small sections to encapsulate tiny emotional moments within the last five minutes and the first five minutes of a man’s life.",
+      "url": "https://drive.google.com/file/d/16WoPaNoVO_SrUdpT5XN_ISfebgPVJs7x/view?usp=sharing"
+    },
+    {
+      "title": "Eusedia — D&D Campaign",
+      "meta": "Narrative Design / Worldbuilding · 17 Sessions",
+      "desc": "Led a 17-session tabletop RPG campaign focused on moral ambiguity and the complexities of good vs. evil. Custom mechanics for chase sequences and puzzle-solving. Extensive worldbuilding, lore, and session planning.",
+      "url": ""
+    }
+  ],
+  "contact": {
+    "tagline": "Looking to collaborate, hire, or just talk shop about games, stories, and the worlds between? My raven is always in flight.",
+    "email": "rsarlatte421@gmail.com"
+  },
+  "footer": "· Ray Sarlatte · Game Designer · Narrative Designer · Writer ·",
+  "sectionOrder": [
+    "hero",
+    "projects",
+    "writing",
+    "skills",
+    "education",
+    "experience",
+    "about",
+    "contact"
+  ],
+  "sectionVisibility": {
+    "about": true,
+    "projects": true,
+    "writing": true,
+    "skills": true,
+    "education": true,
+    "experience": true,
+    "contact": true
+  },
+  "customSections": [],
+  "style": {
+    "colors": {
+      "bg": "#0d0b0f",
+      "bg2": "#161219",
+      "bg3": "#1e1829",
+      "fg": "#f0eaff",
+      "fg2": "#c9bfdf",
+      "fg3": "#8b7fa8",
+      "accent": "#b088f9",
+      "accent2": "#e8445a",
+      "gold": "#d4a843",
+      "border": "#2a1f3d",
+      "border2": "#3d2f5a"
+    },
+    "fontDisplay": "Cinzel",
+    "fontBody": "Crimson Pro",
+    "glow1": "rgba(176,136,249,0.06)",
+    "glow2": "rgba(232,68,90,0.04)",
+    "pattern": "cross"
+  }
+};
+
+// ═══════════════════════════════════════════════════════════════
+// PAGE NAVIGATION
+// ═══════════════════════════════════════════════════════════════
+let currentPage = 'home';
+// Tracks which project (by index into data.projects) is currently shown on the detail
+// page, if any. Set inside renderProjectDetail() itself since that function is the
+// single place called by showPage(), the prev/next nav buttons, AND editProjectFromDetail
+// — so no matter how the user got to a given project's detail page, this stays accurate.
+let currentProjectIdx = null;
+function showPage(name, projIdx) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  currentPage = name;
+  if(name === 'project' && projIdx !== undefined) renderProjectDetail(projIdx);
+}
+// Smooth-scrolls to a top-level Home section by id. Used by the nav links: if a project
+// detail page is currently showing, it first flips back to the Home page, then scrolls.
+function scrollToSection(id) {
+  setTimeout(() => {
+    const el = document.getElementById(id);
+    if(el) el.scrollIntoView({behavior:'smooth'});
+    else window.scrollTo({top:0,behavior:'smooth'});
+  }, 50);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// SECTION REORDERING
+// ═══════════════════════════════════════════════════════════════
+// All reorderable sections live as direct children of #page-home, identified by their
+// section id (e.g. "about", "contact"). "hero" is excluded from reordering — it always
+// stays first as the page's entry banner. The trailing <footer> always stays last.
+// Custom user-added sections get generated ids like "custom-0", "custom-1", etc. and are
+// rendered fresh into #custom-sections-container each time, since (unlike the built-in
+// sections) their DOM doesn't pre-exist in the page source.
+const BUILTIN_SECTIONS = ['about','projects','writing','skills','education','experience','contact'];
+
+// Generates the DOM id for the Nth custom section (e.g. customSectionId(0) -> "custom-0")
+function customSectionId(idx) { return 'custom-' + idx; }
+
+// Rebuilds every custom section's <section> markup from data.customSections and injects
+// it into #custom-sections-container. Called every time applySectionOrder() runs.
+function renderCustomSections() {
+  const container = document.getElementById('custom-sections-container');
+  if (!container) return;
+  container.innerHTML = (data.customSections || []).map((cs, i) => {
+    const bodyHtml = mdToHtml(cs.body || '');
+    return `
+      <section id="${customSectionId(i)}" class="custom-section">
+        <div class="sec-eyebrow">// ${esc(cs.eyebrow || 'Custom')}</div>
+        <h2 class="sec-heading">${esc(cs.title || 'Untitled Section')}</h2>
+        <div class="custom-section-body">${bodyHtml}</div>
+      </section>`;
+  }).join('');
+}
+
+// Re-renders custom sections, applies show/hide visibility to built-in sections, and
+// physically reorders every <section> element inside #page-home to match
+// data.sectionOrder. Called at the start of every renderSite() so the Layout tab's
+// settings always take effect immediately after "Apply Changes".
+function applySectionOrder() {
+  const container = document.getElementById('page-home');
+  if (!container || !Array.isArray(data.sectionOrder)) return;
+
+  // Re-render custom section DOM nodes fresh each time, since their content can change
+  renderCustomSections();
+
+  // Show/hide built-in sections according to sectionVisibility (custom sections don't have
+  // a visibility toggle — removing one deletes it outright via the editor instead).
+  if (!data.sectionVisibility) data.sectionVisibility = {};
+  BUILTIN_SECTIONS.forEach(id => {
+    const sec = document.getElementById(id);
+    if (!sec) return;
+    const visible = data.sectionVisibility[id] !== false; // default to visible if unset
+    sec.style.display = visible ? '' : 'none';
+  });
+
+  // Build the desired order, but always force "hero" first since it's the page banner, not a
+  // reorderable content section. The footer itself is moved explicitly to the end regardless
+  // of section order.
+  const order = data.sectionOrder.filter(id => id !== 'hero');
+
+  // Defensive: if sectionOrder is missing any known built-in section (e.g. an older save),
+  // append it at the end so content is never silently lost from view.
+  BUILTIN_SECTIONS.forEach(id => {
+    if (!order.includes(id) && document.getElementById(id)) order.push(id);
+  });
+  // Likewise for custom sections that may exist in data but not yet in sectionOrder
+  (data.customSections || []).forEach((_, i) => {
+    const id = customSectionId(i);
+    if (!order.includes(id)) order.push(id);
+  });
+
+  const heroEl = document.getElementById('hero');
+  const footerEl = container.querySelector('footer');
+
+  // Re-append in the desired sequence — appendChild on an already-attached node moves it,
+  // it does not clone it, so all existing element references/listeners remain valid.
+  if (heroEl) container.appendChild(heroEl);
+  order.forEach(id => {
+    const sec = document.getElementById(id);
+    if (sec) container.appendChild(sec);
+  });
+  if (footerEl) container.appendChild(footerEl);
+}
+
+// Human-readable display names for built-in section ids, shown in the Layout tab's list
+const SECTION_LABELS = {
+  hero:'Hero', about:'About', projects:'Projects', writing:'Writing',
+  skills:'Skills', education:'Education', experience:'Experience', contact:'Contact'
+};
+
+// Resolves a section id to its display label for the Layout tab — built-in sections use
+// SECTION_LABELS, custom sections use their own title (falling back to a generic name).
+function sectionLabelFor(id) {
+  if (SECTION_LABELS[id]) return SECTION_LABELS[id];
+  if (id.startsWith('custom-')) {
+    const idx = parseInt(id.slice(7), 10);
+    const cs = (data.customSections || [])[idx];
+    return cs && cs.title ? cs.title : 'Custom Section';
+  }
+  return id;
+}
+
+// Rebuilds the Layout tab's section list (#section-order-list) from data.sectionOrder,
+// rendering each row's up/down arrows, visibility eye toggle, or delete button depending
+// on whether it's the locked Hero, a built-in section, or a custom section.
+
+// Swaps two adjacent entries in data.sectionOrder (skipping over "hero", which never
+// moves) — called by the Layout tab's ↑/↓ buttons.
+
+// Flips a built-in section's visibility flag — called by the Layout tab's eye icon.
+// Hiding a section keeps all its data intact, it just stops rendering on the page.
+
+// Creates a new blank custom section, appends it to data.customSections, and adds its id
+// to the end of data.sectionOrder so it shows up at the bottom of the page by default.
+
+// Removes a custom section entirely (data + sectionOrder entry), then re-numbers any
+// remaining custom-N ids in sectionOrder so they still point at the correct array index
+// after the splice shifts everything down by one.
+
+// Rebuilds the Layout tab's editable form fields (eyebrow/title/body) for every custom
+// section — one .e-card per section, each with its own delete button.
+
+// Live-updates one field (title/eyebrow/body) of a custom section as the user types in its
+// editor inputs, writing straight into data.customSections and re-rendering the affected
+// section in place so the change previews immediately without an explicit Apply.
+
+// ═══════════════════════════════════════════════════════════════
+// RENDER HOME
+// ═══════════════════════════════════════════════════════════════
+// renderSite() is the main "paint the page" function: it reads the entire `data` object
+// and writes the corresponding HTML into every section on the Home page. It's called once
+// on initial page load, and again every time "Apply Changes" is clicked in the editor —
+// so every block below should be idempotent (safe to re-run repeatedly with new data).
+function renderSite() {
+  applySectionOrder();
+
+  // ── Hero ──
+  document.getElementById('hero-name-el').textContent = data.hero.name;
+  document.getElementById('hero-eyebrow-el').textContent = data.hero.eyebrow;
+  document.getElementById('hero-title-el').textContent = data.hero.title;
+  document.getElementById('hero-tagline-el').textContent = data.hero.tagline;
+  document.getElementById('nav-brand-el').textContent = data.hero.navBrand;
+  const ctaEl = document.getElementById('hero-cta-el');
+  ctaEl.textContent = data.hero.cta;
+  if (data.hero.ctaUrl) {
+    ctaEl.href = data.hero.ctaUrl;
+    ctaEl.removeAttribute('aria-disabled');
+  } else {
+    // No resume URL set yet — keep the button visible but inert rather than linking to a blank page
+    ctaEl.removeAttribute('href');
+    ctaEl.setAttribute('aria-disabled', 'true');
+  }
+
+  // ── About: bio text ──
+  // Bio supports **bold** markdown and blank-line-separated paragraphs. Paragraphs are
+  // built as actual sibling <p> elements inside the bioEl container (not raw string
+  // concatenation with stray closing tags), so clearing the bio to empty correctly
+  // clears everything on screen instead of leaving orphaned paragraph elements behind.
+  const bioEl = document.getElementById('about-bio-el');
+  const bioHtml = data.about.bio
+    .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
+    .split(/\n\n+/)
+    .map(para => para.trim())
+    .filter(para => para.length > 0)
+    .map((para, i) => i === 0 ? `<p>${para}</p>` : `<p style="margin-top:16px">${para}</p>`)
+    .join('');
+  bioEl.innerHTML = bioHtml;
+
+  // ── About: profile photo (optional) ──
+  // Hidden entirely (and its src cleared) whenever no photo URL is set, rather than
+  // showing an empty broken-image box.
+  const photoWrap = document.getElementById('about-photo-wrap-el');
+  const photoEl = document.getElementById('about-photo-el');
+  if (data.about.photoUrl) {
+    photoEl.src = data.about.photoUrl;
+    photoWrap.style.display = 'block';
+  } else {
+    photoWrap.style.display = 'none';
+    photoEl.removeAttribute('src');
+  }
+
+  // ── About: role badges (Game Designer / Level Designer / etc.) ──
+  document.getElementById('about-roles-el').innerHTML = data.about.roles.map(r=>`<div class="role-badge"><div class="role-badge-title">${r.title}</div><div class="role-badge-sub">${r.sub}</div></div>`).join('');
+
+  // ── About: Favorite Games — a personal-touch strip of box art at the bottom of the
+  // About section, always shown in the order given (not sorted), since this is a
+  // deliberately curated top-N list rather than a chronological or alphabetical one.
+  // Hidden entirely if the list is empty, same pattern as the photo above.
+  const favGamesEl = document.getElementById('about-favgames-el');
+  const favGames = data.about.favoriteGames || [];
+  favGamesEl.innerHTML = favGames.length ? `<div class="about-favgames-label">Favorite Games</div><div class="about-favgames-grid">${
+    favGames.map(g => `<div class="about-favgame"><div class="about-favgame-thumb${g.fit==='contain'?' fit-contain':''}"><img src="${g.url}" alt="${esc(g.title)}" loading="lazy"></div><div class="about-favgame-title">${esc(g.title)}</div></div>`).join('')
+  }</div>` : '';
+
+  // ── Social links — reused in both the About section and the Contact section ──
+  const socialHTML = data.about.socials.map(s=>`<a href="${s.url}" class="social-btn" target="_blank">${s.icon} ${s.label}</a>`).join('');
+  document.getElementById('about-links-el').innerHTML = socialHTML;
+  document.getElementById('contact-links-el').innerHTML = socialHTML;
+
+  // ── Projects ──
+  // Each card is clickable (opens that project's full case-study page via showPage), and
+  // separately offers a "Play"-style external link if a liveUrl is set. The play button's
+  // label is editable per-project (liveLabel) instead of being hardcoded — e.g. "Play on
+  // Steam" vs "Play on Itch.io" — defaulting to "Play on Itch.io" if unset.
+  document.getElementById('proj-grid-el').innerHTML = data.projects.map((p,i)=>`
+    <div class="proj-card" onclick="showPage('project',${i});window.scrollTo(0,0)">
+      <div class="proj-img">${p.imageUrl?`<img src="${p.imageUrl}" alt="${p.title}">`:'<span>Click to view</span>'}</div>
+      <div style="flex:1;min-width:0">
+        <div class="proj-num">${String(i+1).padStart(2,'0')} · ${p.team}</div>
+        <h3 class="proj-title">${p.title}</h3>
+        <div class="proj-role">${p.roles.map(r=>`<span>${r}</span>`).join('')}</div>
+        <p class="proj-desc"><em style="color:var(--fg3);font-size:13px">${p.type} · ${p.date}</em><br><br>${p.desc}</p>
+        <div class="proj-links">
+          <span class="proj-link primary" onclick="event.stopPropagation();showPage('project',${i});window.scrollTo(0,0)">View Case Study ↗</span>
+          ${p.liveUrl?`<a href="${p.liveUrl}" class="proj-link" target="_blank" onclick="event.stopPropagation()">${esc(p.liveLabel||'Play on Itch.io')}</a>`:''}
+        </div>
+      </div>
+    </div>`).join('');
+
+  // ── Writing ──
+  document.getElementById('writing-grid-el').innerHTML = data.writing.map(w=>`
+    <div class="writing-card">
+      <div><div class="writing-title">${w.title}</div><div class="writing-meta">${w.meta}</div><p class="writing-desc">${w.desc}</p></div>
+      ${w.url?`<a href="${w.url}" class="writing-link" target="_blank">Read ↗</a>`:''}
+    </div>`).join('');
+
+  // ── Skills (grouped by category) ──
+  document.getElementById('skills-grid-el').innerHTML = data.skills.map(cat=>`
+    <div><div class="skill-cat-name">${cat.category}</div><div class="skill-items">${cat.items.map(i=>`<div class="skill-item">${i}</div>`).join('')}</div></div>`).join('');
+
+  // ── Education ──
+  document.getElementById('edu-list-el').innerHTML = data.education.map(e=>`
+    <div class="edu-card"><div><div class="edu-school">${e.school}</div><div class="edu-degree">${e.degree}</div>${e.desc?`<div class="edu-desc">${e.desc}</div>`:''}</div><div class="edu-date">${e.date}</div></div>`).join('');
+
+  // ── Experience (accordion — see toggleExp() below for the expand/collapse behavior) ──
+  // Grouped by category (e.g. "Tech", "Games") in first-seen order from data.experience —
+  // NOT alphabetical, so the order of groups follows wherever each category first appears
+  // in the array. Entries without a category fall into a single ungrouped section with no
+  // label, so existing data with no "category" field set still renders exactly as before.
+  const expGroups = [], expSeen = {};
+  data.experience.forEach((e,i) => {
+    const cat = e.category || '';
+    if (!(cat in expSeen)) { expSeen[cat] = expGroups.length; expGroups.push({ cat, items: [] }); }
+    expGroups[expSeen[cat]].items.push(i);
+  });
+  const expItemHTML = i => { const e = data.experience[i]; return `
+    <div class="exp-item" id="exp-${i}">
+      <div class="exp-header" onclick="toggleExp(${i})">
+        <div><div class="exp-company">${e.company}</div><div class="exp-role">${e.role}</div></div>
+        <div style="text-align:right;flex-shrink:0"><div class="exp-date">${e.date}</div><div class="exp-chevron">▾</div></div>
+      </div>
+      <div class="exp-body">${e.desc?`<p class="exp-desc">${e.desc}</p>`:''}${e.highlights.length?`<ul class="exp-highlights">${e.highlights.map(h=>`<li>${h}</li>`).join('')}</ul>`:''}${e.tech.length?`<div class="exp-tech">${e.tech.map(t=>`<span class="tech-tag">${t}</span>`).join('')}</div>`:''}</div>
+    </div>`; };
+  document.getElementById('exp-list-el').innerHTML = expGroups.map(g => `
+    <div class="exp-group">${g.cat?`<div class="exp-group-label">${esc(g.cat)}</div>`:''}<div class="exp-group-items">${g.items.map(expItemHTML).join('')}</div></div>`).join('');
+
+  // ── Contact + footer ──
+  document.getElementById('contact-tagline-el').textContent = data.contact.tagline;
+  const em = document.getElementById('contact-email-el');
+  em.textContent = data.contact.email;
+  em.href = `mailto:${data.contact.email}`;
+  document.getElementById('footer-el').textContent = data.footer;
+}
+// Expands/collapses one Experience accordion row by toggling its "open" class
+function toggleExp(i){document.getElementById('exp-'+i).classList.toggle('open')}
+
+// ═══════════════════════════════════════════════════════════════
+// RENDER PROJECT DETAIL
+// ═══════════════════════════════════════════════════════════════
+// Converts **bold** markdown and blank-line paragraph breaks to HTML — used for both the
+// main detail body and the three narrative fields (origin, challenges, retrospective).
+// Splits on any run of 2+ newlines (not just exactly two), trims and drops empty segments,
+// so stray leading/trailing blank lines in a field never produce an empty <p></p> gap.
+// Mirrors the same paragraph-splitting approach used for the About bio above, so both
+// stay visually consistent no matter which field the content came from.
+function mdToHtml(text) {
+  return text
+    .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
+    .split(/\n\n+/)
+    .map(para => para.trim())
+    .filter(para => para.length > 0)
+    .map(para => `<p>${para}</p>`)
+    .join('');
+}
+
+// Turns a gallery image path into a readable caption from its filename, e.g.
+// "images/glocktopus/gold1leveldesignbefore.png" -> "Gold 1 · Level Design Before".
+// Recognizes sprint prefixes (gold1, gold2, beta1, finalsprint/finalspprint) and spaces
+// out the remaining run-on words as best it can. Falls back to the raw filename if unsure.
+// Manual overrides for specific gallery images whose ideal caption doesn't cleanly fall
+// out of the filename-parsing rules below. Keyed by exact filename (with extension);
+// the sprint/phase prefix (e.g. "Final Sprint · ") is still auto-detected and prepended,
+// so only the descriptive part needs to be specified here.
+const GALLERY_CAPTION_OVERRIDES = {
+  'finalsprintnewfloorclippingfixphoto.png': 'Stingray Pool Mesh Edit & On-Rail Camera Edit',
+  'cb-battle.png': 'Card Battle Encounter',
+  'cb-shop.png': 'Tarot Shop Interior',
+  'cb-map.png': 'Overworld Map & Daily To-Do List',
+  'eusedia-obsidian-graph.png': 'Obsidian Graph View — Campaign Notes & Lore',
+};
+
+function galleryCaption(path) {
+  const filename = path.split('/').pop();
+  // Normalize hyphens/underscores to spaces upfront — covers hyphenated filenames like
+  // "battlefield-overrun.jpg" generically, without needing per-file rules below.
+  let name = filename.replace(/\.[a-z]+$/i, '').replace(/[-_]/g, ' ');
+  const phases = [
+    [/^gold1/, 'Gold 1 · '],
+    [/^gold2/, 'Gold 2 · '],
+    [/^beta2/, 'Beta 2 · '],
+    [/^beta1/, 'Beta 1 · '],
+    [/^final(sp?print|spprint)/, 'Final Sprint · '],
+  ];
+  let prefix = '';
+  for (const [re, label] of phases) {
+    if (re.test(name)) { prefix = label; name = name.replace(re, ''); break; }
+  }
+  // Some filenames carry the phase as a suffix instead of a prefix (e.g. "...beta1")
+  if (!prefix) {
+    if (/beta1$/i.test(name)) { prefix = 'Beta 1 · '; }
+    else if (/beta2$/i.test(name)) { prefix = 'Beta 2 · '; }
+  }
+  // Manual override takes priority over the auto-generated description, but the
+  // auto-detected phase prefix above still applies on top of it.
+  if (GALLERY_CAPTION_OVERRIDES[filename]) {
+    return (prefix + GALLERY_CAPTION_OVERRIDES[filename]).trim();
+  }
+  // Insert spaces around some known tokens/keywords and camel/word boundaries
+  name = name
+    .replace(/underconstructionlevellayoutbrainstorm/gi, 'under-construction level layout brainstorm')
+    .replace(/underconstructionlevellayoutiso/gi, 'under-construction level iso layout')
+    .replace(/level1isolayout/gi, 'Level 1 iso layout')
+    .replace(/level1blockout/gi, 'Level 1 blockout')
+    .replace(/eatingforpower/gi, 'Eating for Power')
+    .replace(/gummybearattack/gi, 'Gummy Bear Attack')
+    .replace(/gummyshield/gi, 'Gummy Shield')
+    .replace(/bunnyambush/gi, 'Bunny Ambush')
+    .replace(/chargeattack/gi, 'Charge Attack')
+    .replace(/classcards/gi, 'Class Cards')
+    .replace(/enhancements(\d*)/gi, (m,n) => 'Enhancements' + (n ? ' ' + n : ''))
+    .replace(/abilities(\d*)/gi, (m,n) => 'Ability Cards' + (n ? ' ' + n : ''))
+    .replace(/bossmonsters(\d*)/gi, (m,n) => 'Boss Monsters' + (n ? ' ' + n : ''))
+    .replace(/entrancehallenvironment/gi, 'entrance hall environment ')
+    .replace(/leveltransition/gi, 'level transition')
+    .replace(/leveldesign/gi, 'level design ')
+    .replace(/beforematerialfixes/gi, 'material fixes (before)')
+    .replace(/aftermaterialfixes/gi, 'material fixes (after)')
+    .replace(/materialissue/gi, 'material issue ')
+    .replace(/materialphoto/gi, 'material ')
+    .replace(/floorclippingfix/gi, 'floor clipping fix')
+    .replace(/tanklayout/gi, 'tank layout')
+    .replace(/trlevel/gi, 'Tropical River level')
+    .replace(/forestlevel/gi, 'forest level ')
+    .replace(/blueprintgraph/gi, 'blueprint graph ')
+    .replace(/cameraadjustments/gi, 'camera adjustments ')
+    .replace(/splinefixes/gi, 'spline fixes')
+    .replace(/turtlestandee/gi, 'turtle standee')
+    .replace(/bpventcover/gi, 'BP_VentCover')
+    .replace(/jellyfish[-\s]?fishplacement/gi, 'jellyfish & fish placement')
+    .replace(/orangeoutlineonpipe/gi, 'orange outline on pipe')
+    .replace(/newfloor/gi, 'new floor ')
+    .replace(/newtank/gi, 'new tank ')
+    .replace(/beta1/gi, '')
+    .replace(/beta2/gi, '')
+    .replace(/^before/gi, ' before')
+    .replace(/^after/gi, ' after')
+    .replace(/^photo(\d+)$/i, 'progress $1')
+    .replace(/photo\d*/gi, m => ' ' + m.replace('photo',''))
+    .replace(/\s+/g, ' ')
+    .trim();
+  // Title-case words, but keep known ALL-CAPS/underscore tokens intact and handle (parenthesized) words
+  name = name.split(' ').map(w => {
+    if (/^BP_/i.test(w) || /^[A-Z]{2,}$/.test(w)) return w;
+    if (w.startsWith('(')) return '(' + w.charAt(1).toUpperCase() + w.slice(2);
+    return w.charAt(0).toUpperCase() + w.slice(1);
+  }).join(' ');
+  return (prefix + name).trim();
+}
+
+// Builds the full case-study page for ONE project (data.projects[idx]) and injects it
+// into #proj-detail-content. Called by showPage('project', idx) when a project card is
+// clicked, and again directly when navigating via the prev/next buttons at the bottom of
+// the page — so unlike renderSite(), this never runs on initial load by itself.
+// Builds the "Environment Assets" section: individual props / set-dressing pieces
+// (crystal & rock formations, trees, foliage, candy-cane props, structures), grouped
+// under category sub-labels. Categories are rendered in first-seen order from the data,
+// so reordering the editor lines reorders the on-page groups. Returns '' when empty so
+// the section header never shows for projects that have no such assets.
+function renderEnvAssets(list) {
+  if (!list || !list.length) return '';
+  const groups = [], seen = {};
+  list.forEach(a => {
+    const cat = a.category || 'Other';
+    if (!(cat in seen)) { seen[cat] = groups.length; groups.push({ cat, items: [] }); }
+    groups[seen[cat]].items.push(a);
+  });
+  const body = groups.map(g =>
+    `<div class="pd-env-group"><div class="pd-env-group-label">${esc(g.cat)}</div><div class="pd-env-assets">${
+      g.items.map(a => `<figure><div class="pd-env-thumb"><img src="${a.url}" alt="${esc(a.label)}" loading="lazy"></div><figcaption>${esc(a.label)}</figcaption></figure>`).join('')
+    }</div></div>`
+  ).join('');
+  return `<div class="pd-section-head">Environment Assets</div>${body}`;
+}
+function renderProjectDetail(idx) {
+  currentProjectIdx = idx;
+  const p = data.projects[idx];
+  const d = p.detail;
+  const prevIdx = idx > 0 ? idx-1 : null;
+  const nextIdx = idx < data.projects.length-1 ? idx+1 : null;
+
+  // Convert the case-study body's **bold** markdown and blank-line paragraph breaks into HTML
+  const bodyHTML = mdToHtml(d.body);
+
+  document.getElementById('proj-detail-content').innerHTML = `
+    <div class="pd-header-row">
+      <div class="pd-back" onclick="showPage('home');scrollToSection('projects')">← Back to Projects</div>
+    </div>
+    <div class="pd-eyebrow">${p.type}</div>
+    <h1 class="pd-title">${p.title}</h1>
+    <div class="pd-roles">${p.roles.map(r=>`<span class="pd-role-tag">${r}</span>`).join('')}</div>
+    <!-- Type / Team / Date meta bar -->
+    <div class="pd-meta-bar">
+      <div class="pd-meta-item"><div class="pd-meta-label">Type</div><div class="pd-meta-val">${p.type.split('·')[0].trim()}</div></div>
+      <div class="pd-meta-item"><div class="pd-meta-label">Team</div><div class="pd-meta-val">${p.team}</div></div>
+      <div class="pd-meta-item"><div class="pd-meta-label">Date</div><div class="pd-meta-val">${p.date}</div></div>
+    </div>
+    <!-- Hero image, or a placeholder hint if none is set yet -->
+    ${p.imageUrl?`<img class="pd-hero-img" src="${p.imageUrl}" alt="${p.title}">`:`<div class="pd-hero-placeholder">[ Add an image URL in the editor → Work → Projects ]</div>`}
+    <div class="pd-section-head">Overview</div>
+    <div class="pd-body">${bodyHTML}</div>
+    <!-- Key Contributions, Tools & Skills, and Gallery are all optional — each only
+         renders if that data actually exists, so empty projects don't show blank headers -->
+    ${d.highlights.length?`<div class="pd-section-head">Key Contributions</div><ul class="pd-highlights">${d.highlights.map(h=>`<li>${h}</li>`).join('')}</ul>`:''}
+    ${d.origin?`<div class="pd-section-head">Origin &amp; Inspiration</div><div class="pd-body">${mdToHtml(d.origin)}</div>`:''}
+    ${d.challenges?`<div class="pd-section-head">Challenges &amp; Problem-Solving</div><div class="pd-body">${mdToHtml(d.challenges)}</div>`:''}
+    ${d.retrospective?`<div class="pd-section-head">Retrospective</div><div class="pd-body">${mdToHtml(d.retrospective)}</div>`:''}
+    ${d.tags.length?`<div class="pd-section-head">Tools & Skills</div><div class="pd-tags">${d.tags.map(t=>`<span class="pd-tag">${t}</span>`).join('')}</div>`:''}
+    ${d.gallery&&d.gallery.length?`<div class="pd-section-head">Gallery</div><div class="pd-gallery">${d.gallery.map(u=>`<figure><img src="${u}" alt="${galleryCaption(u)}" loading="lazy"><figcaption>${galleryCaption(u)}</figcaption></figure>`).join('')}</div>`:''}
+    ${d.backgrounds&&d.backgrounds.length?`<div class="pd-section-head">Environment Backgrounds</div><div class="pd-backgrounds">${d.backgrounds.map(b=>`<figure><img src="${b.url}" alt="${esc(b.label)}" loading="lazy"><figcaption>${esc(b.label)}</figcaption></figure>`).join('')}</div>`:''}
+    ${renderEnvAssets(d.environmentAssets)}
+    <!-- Play (label is editable per-project) and Source links -->
+    <div class="pd-links">
+      ${p.liveUrl?`<a href="${p.liveUrl}" class="btn-primary" target="_blank">${esc(p.liveLabel||'Play on Itch.io')} ↗</a>`:''}
+      ${p.sourceUrl?`<a href="${p.sourceUrl}" class="btn-outline" target="_blank">Source</a>`:''}
+    </div>
+    <!-- Prev/Next project navigation -->
+    <div class="pd-nav">
+      ${prevIdx!==null?`<div class="pd-nav-btn" onclick="renderProjectDetail(${prevIdx});window.scrollTo(0,0)">← ${data.projects[prevIdx].title}</div>`:'<div></div>'}
+      ${nextIdx!==null?`<div class="pd-nav-btn" onclick="renderProjectDetail(${nextIdx});window.scrollTo(0,0)">${data.projects[nextIdx].title} →</div>`:'<div></div>'}
+    </div>
+  `;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// STYLE: COLORS & EFFECTS
+// ═══════════════════════════════════════════════════════════════
+// Everything in this block backs the editor's Style tab: the 11-color palette, heading/
+// body fonts, and the background glow/pattern effects. All of it works by writing CSS
+// custom properties (--bg, --accent, etc.) onto <html> at runtime, which the entire
+// stylesheet already references via var(--bg) etc. — so changing a color here updates
+// the whole site instantly without re-rendering any HTML.
+const colorKeys = ['bg','bg2','bg3','fg','fg2','fg3','accent','accent2','gold','border','border2'];
+
+// Pushes every color in data.style.colors onto the live page as CSS custom properties.
+// Called on initial load and whenever colors change (manual edit, preset, or color picker).
+function applyColorsToDOM(colors){
+  colorKeys.forEach(k=>{
+    if(colors[k]) document.documentElement.style.setProperty('--'+k, colors[k]);
+  });
+}
+// Called live (oninput) by each color-picker swatch in the Style tab: keeps the matching
+// hex text field in sync, updates data immediately, and previews the change on the page
+// right away — without needing to click "Apply Changes" first.
+// Reads whatever's currently typed into each hex text field back into data.style.colors.
+// Called from applyChanges() so manually-typed hex values (not just the color pickers)
+// also get saved when "Apply Changes" is clicked.
+// Fills in the Style tab's hex text fields + native color pickers from the current
+// data.style.colors — called whenever the editor panel opens.
+// Reads the two font <select> dropdowns and applies the chosen fonts directly to every
+// matching heading/body element on the page via inline style.fontFamily.
+// Reads the glow-color and pattern <select> dropdowns and hands them off to
+// updateBgEffects() to actually apply them.
+// Rebuilds the page's decorative background (the two radial-gradient glows from
+// body::before, and the repeating SVG pattern from body::after) by injecting a fresh
+// <style id="dynamic-bg-style"> tag that overrides the static rules in the stylesheet.
+// This indirection (rather than editing body::before/after directly) is what lets the
+// background effects be swapped at runtime without rewriting the whole stylesheet.
+
+// One-click full-palette presets offered in the Style tab — each is a complete set of
+// the same 11 color keys used everywhere else, just with different hex values.
+const PRESETS = {
+  'dark-purple':{bg:'#0d0b0f',bg2:'#161219',bg3:'#1e1829',fg:'#f0eaff',fg2:'#c9bfdf',fg3:'#8b7fa8',accent:'#b088f9',accent2:'#e8445a',gold:'#d4a843',border:'#2a1f3d',border2:'#3d2f5a'},
+  'dark-crimson':{bg:'#0f0a0a',bg2:'#1a1010',bg3:'#261818',fg:'#fff0f0',fg2:'#dfc9c9',fg3:'#a87f7f',accent:'#e05555',accent2:'#f9a825',gold:'#c8922a',border:'#3d1f1f',border2:'#5a2f2f'},
+  'dark-ocean':{bg:'#0a0d14',bg2:'#10141e',bg3:'#171d2c',fg:'#e8f4ff',fg2:'#b8d0e8',fg3:'#6a8aaa',accent:'#4da8e8',accent2:'#e8a84d',gold:'#4de8c8',border:'#1a2840',border2:'#2a3c58'},
+  'dark-forest':{bg:'#090d0a',bg2:'#111a12',bg3:'#18261a',fg:'#eaf5ea',fg2:'#c0d8c0',fg3:'#7a9a7a',accent:'#5cc85c',accent2:'#c85c5c',gold:'#c8a840',border:'#1a3020',border2:'#2a4830'},
+  'dark-gold':{bg:'#0d0c08',bg2:'#1a180f',bg3:'#252016',fg:'#fff8e8',fg2:'#e0d0a8',fg3:'#a89060',accent:'#d4a843',accent2:'#e8555a',gold:'#f0c060',border:'#362e18',border2:'#524428'},
+  'light-parchment':{bg:'#f5f0e8',bg2:'#ede8de',bg3:'#e0d8ca',fg:'#2a1f10',fg2:'#4a3828',fg3:'#7a6850',accent:'#7c3aed',accent2:'#b91c1c',gold:'#92400e',border:'#c8b898',border2:'#a89878'}
+};
+// Applies one of the named presets above: merges its colors into data.style.colors,
+// pushes them onto the page immediately, and refreshes the color-picker inputs to match.
+
+// ═══════════════════════════════════════════════════════════════
+// EDITOR POPULATION & RENDERING
+// ═══════════════════════════════════════════════════════════════
+// These functions fill the editor panel's form fields FROM data — the mirror image of
+// applyChanges() further down, which reads the fields BACK INTO data. populateEditor()
+// runs once whenever the panel opens; each renderXEditor() function rebuilds one
+// repeatable list (roles, socials, skills, etc.) as a series of .e-card blocks, each with
+// its own delete button wired to the matching delX(i) function.
+// About tab: role badge cards (Game Designer / Level Designer / etc.)
+// About tab: social/profile link cards (shown in both About and Contact sections)
+// About tab: skill category cards (each with a comma-separated list of skill tags)
+// About tab: education entry cards
+// Work tab: experience entry cards (company, role, dates, description, highlights, tags)
+// Work tab: project entry cards — the biggest editor card, since each project also
+// carries its full case-study detail (body, highlights, tags, gallery) shown on its
+// dedicated detail page. The id="proj-edit-card-${i}" on each card is what
+// editProjectFromDetail() scrolls to and highlights when "Edit This Project" is clicked
+// from a project's detail page.
+// Work tab: writing entry cards (short stories / lore pieces)
+
+// ═══════════════════════════════════════════════════════════════
+// APPLY CHANGES
+// ═══════════════════════════════════════════════════════════════
+// Fired by the "Apply Changes" button: reads every editor form field back into `data`
+// (the mirror image of populateEditor() above), then calls renderSite() to repaint the
+// page with the new values. Note: data.sectionOrder, data.sectionVisibility, and
+// data.customSections are NOT touched here — those are mutated directly and immediately
+// by their own dedicated functions (moveSectionOrder, toggleSectionVisibility,
+// addCustomSection, etc.), so this function only needs to handle plain text fields.
+
+// ═══════════════════════════════════════════════════════════════
+// ADD / DELETE
+// ═══════════════════════════════════════════════════════════════
+// One add/delete pair per repeatable list (roles, socials, skills, education, experience,
+// projects, writing). Each "add" pushes a sensible blank placeholder into the matching
+// `data` array and immediately re-renders just that list's editor cards; each "delete"
+// removes one entry by index (splice) and re-renders. These are the onclick handlers
+// wired to the "+ Add X" buttons and each card's × delete button.
+
+// ═══════════════════════════════════════════════════════════════
+// UTILS
+// ═══════════════════════════════════════════════════════════════
+// val(id): shorthand for reading a form field's value by id, used throughout applyChanges()
+// esc(str): HTML-escapes a string before interpolating it into innerHTML template
+// literals, so user-typed quotes/angle-brackets in editor fields can't break the markup.
+function esc(str){return String(str||'').replace(/"/g,'&quot;').replace(/</g,'&lt;')}
+// showToast(msg): displays the small floating confirmation banner for ~2.4 seconds
+
+// ═══════════════════════════════════════════════════════════════
+// SECRET KEY COMBO: Shift + R + S reveals/hides editor controls
+// ═══════════════════════════════════════════════════════════════
+// The "Edit Content" and "Edit This Project" buttons are hidden from regular visitors.
+// Holding Shift, then pressing R then S in sequence (while Shift stays held) toggles
+// their visibility. This is purely a visibility toggle for a cleaner public-facing
+// page — it has no bearing on security, since all editing logic still runs
+// client-side in this static HTML file regardless of whether the buttons are shown.
+let comboBuffer = [];
+let comboTimer = null;
+
+// Clears the in-progress key sequence and cancels its expiry timer — called after a
+// successful combo, a failed/interrupted attempt, or Shift being released early.
+
+// ═══════════════════════════════════════════════════════════════
+// EDITOR PANEL
+// ═══════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
+// EDITOR PANEL
+// ═══════════════════════════════════════════════════════════════
+// Opens/closes the slide-in editor panel (and shifts the page content left to make room
+// for it). Populates every tab's fields fresh from `data` each time it opens, so the
+// panel always reflects the current state rather than a stale snapshot.
+let editorOpen=false;
+// Switches which editor tab is visible (Hero/About/Work/Contact/Layout/Style) — shows the
+// tab-content div matching the clicked tab id and marks that tab button as active.
+
+// Opens the editor panel directly to this project's fields, from the project detail page.
+// Used by the "Edit This Project" button so editing doesn't require hunting through the
+// Work tab's full project list manually.
+
+// ═══════════════════════════════════════════════════════════════
+// EXPORT
+// ═══════════════════════════════════════════════════════════════
+// "Export HTML" needs to produce a standalone file that, when reopened, shows exactly
+// what's on screen right now — including every edit made via the editor. The tricky part:
+// document.documentElement.outerHTML only captures the rendered DOM, NOT the live `data`
+// object sitting in memory, so naively exporting the page would silently revert to
+// whatever data the file originally shipped with. exportHTML() works around this by
+// directly rewriting the inline script's `data` literal with the current, edited object
+// before serializing, plus cleaning up a few pieces of throwaway UI state (open panel,
+// revealed editor controls) so the downloaded file opens looking like a fresh public page.
+// ═══════════════════════════════════════════════════════════════
+// EXPORT
+// ═══════════════════════════════════════════════════════════════
+// Two export paths share one core routine (buildExportClone) that produces a fully
+// self-contained snapshot of the current page with all live edits baked in:
+//   • exportHTML()        → "Export Editable": the snapshot WITH the editor system intact.
+//   • exportPublicHTML()  → "Export Public Site": the same snapshot but with the entire
+//                           editor system (DOM + JS) physically removed, downloaded as
+//                           index.html for the public website.
+// Both call buildExportClone() first, then diverge only in what they strip and how they name
+// the download.
+
+// The list of editor-only top-level function names. Every one of these has been verified to
+// have NO runtime caller (they're only reached through editor UI, which the public build
+// removes), so exportPublicHTML() can safely delete their definitions from the script text.
+// If you add a new editor-only function later, add its name here so the public export keeps
+// stripping cleanly. Runtime functions (showPage, renderSite, renderProjectDetail,
+// applyColorsToDOM, mdToHtml, galleryCaption, etc.) are deliberately NOT listed — they must
+// survive in the public build.
+
+// Produces a cloned <html> element representing the current page with all live edits baked
+// in: the `data` object is re-serialized into the inline script, the current color palette
+// is written onto <html>, the editor panel is closed, secret-combo controls are hidden, and
+// the Home page is made active. Shared by both export paths. Returns the cloned
+// documentElement (not yet serialized to a string).
+
+// Serializes a cloned <html> element to a downloadable file and triggers the browser download.
+
+// "Export Editable": downloads a working master copy that keeps the full editor system
+// intact (panel, Shift+R+S combo, both export buttons). Filename ray-sarlatte-portfolio.html.
+
+// "Export Public Site": downloads a shippable index.html with the ENTIRE editor system
+// physically removed — both from the DOM and from the JavaScript. In the resulting file the
+// Shift+R+S combo does nothing (its keydown listener is gone), there is no editor panel or
+// toggle button to open, and none of the editor-only functions exist. Everything needed to
+// render and navigate the public site is left fully intact.
+
+// ═══════════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════════
+// Runs once when the page first loads: paints all content (renderSite, which also
+// triggers the initial applySectionOrder) and applies whatever custom colors are saved
+// in data.style.colors. Everything after this point happens in response to user
+// interaction (editor changes, navigation clicks, the secret key combo, etc).
+//
+// showPage('home') runs first and unconditionally, regardless of which .page element's
+// static HTML markup happens to say "active" — a visitor should always land on Home,
+// never mid-way into a project's case study, no matter what state was captured the last
+// time this file was saved or exported.
+showPage('home');
+renderSite();
+applyColorsToDOM(data.style.colors);
+</script>
+
+
+<div id="aiFabShadowRoot" data-fab-type="react" style="opacity: 1;"></div></body></html>
