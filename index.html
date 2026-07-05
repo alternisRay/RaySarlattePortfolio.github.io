@@ -246,7 +246,7 @@ section{max-width:960px;margin:0 auto;padding:110px 48px}
 .exp-desc{color:var(--fg3);font-size:16px;line-height:1.75;margin-bottom:16px}
 .exp-highlights{list-style:none;display:flex;flex-direction:column;gap:8px}
 .exp-highlights li{font-size:15px;color:var(--fg2);padding-left:18px;position:relative;line-height:1.6}
-.exp-highlights li::before{content:'⚔';position:absolute;left:0;color:var(--accent2);font-size:11px;top:3px}
+.exp-highlights li::before{content:'';position:absolute;left:0;top:4px;width:12px;height:12px;background-color:var(--accent2);-webkit-mask:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%2214.5%2017.5%203%206%203%203%206%203%2017.5%2014.5%22%2F%3E%3Cline%20x1%3D%2213%22%20x2%3D%2219%22%20y1%3D%2219%22%20y2%3D%2213%22%2F%3E%3Cline%20x1%3D%2216%22%20x2%3D%2220%22%20y1%3D%2216%22%20y2%3D%2220%22%2F%3E%3Cline%20x1%3D%2219%22%20x2%3D%2221%22%20y1%3D%2221%22%20y2%3D%2219%22%2F%3E%3Cpolyline%20points%3D%2214.5%206.5%2018%203%2021%203%2021%206%2017.5%209.5%22%2F%3E%3Cline%20x1%3D%225%22%20x2%3D%229%22%20y1%3D%2214%22%20y2%3D%2218%22%2F%3E%3Cline%20x1%3D%227%22%20x2%3D%224%22%20y1%3D%2217%22%20y2%3D%2220%22%2F%3E%3Cline%20x1%3D%223%22%20x2%3D%225%22%20y1%3D%2219%22%20y2%3D%2221%22%2F%3E%3C%2Fsvg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%2214.5%2017.5%203%206%203%203%206%203%2017.5%2014.5%22%2F%3E%3Cline%20x1%3D%2213%22%20x2%3D%2219%22%20y1%3D%2219%22%20y2%3D%2213%22%2F%3E%3Cline%20x1%3D%2216%22%20x2%3D%2220%22%20y1%3D%2216%22%20y2%3D%2220%22%2F%3E%3Cline%20x1%3D%2219%22%20x2%3D%2221%22%20y1%3D%2221%22%20y2%3D%2219%22%2F%3E%3Cpolyline%20points%3D%2214.5%206.5%2018%203%2021%203%2021%206%2017.5%209.5%22%2F%3E%3Cline%20x1%3D%225%22%20x2%3D%229%22%20y1%3D%2214%22%20y2%3D%2218%22%2F%3E%3Cline%20x1%3D%227%22%20x2%3D%224%22%20y1%3D%2217%22%20y2%3D%2220%22%2F%3E%3Cline%20x1%3D%223%22%20x2%3D%225%22%20y1%3D%2219%22%20y2%3D%2221%22%2F%3E%3C%2Fsvg%3E") center/contain no-repeat}
 .exp-tech{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px}
 .tech-tag{font-size:12px;font-family:'JetBrains Mono',monospace;padding:3px 10px;background:var(--bg3);border:1px solid var(--border);border-radius:3px;color:var(--fg3)}
 /* Education: simple card list, school + degree on the left, dates on the right. */
@@ -272,6 +272,18 @@ section{max-width:960px;margin:0 auto;padding:110px 48px}
 .custom-section-body strong{color:var(--accent);font-weight:600;font-style:normal}
 footer{text-align:center;padding:32px 40px;color:var(--fg3);font-family:'Cinzel',serif;font-size:11px;letter-spacing:.12em;border-top:1px solid var(--border);position:relative;z-index:1}
 .rune-divider{text-align:center;color:var(--gold);opacity:.3;font-size:18px;letter-spacing:.5em;margin-bottom:52px;margin-top:-12px}
+/* Inline Lucide SVG icons: sized in em so they scale with surrounding text, nudged onto the
+   text baseline, and inheriting currentColor so they pick up whatever color their context sets
+   (e.g. the gold rune dividers, accent-colored buttons). The rune-divider uses flex so its
+   sparkle icons space evenly. */
+.lucide{display:inline-block;vertical-align:-0.15em;width:1em;height:1em;flex-shrink:0}
+/* Small spacing helpers for icons that sit inline with text: ico-inline adds a little space
+   before an icon that follows text (e.g. "View Project →"); ico-inline-l adds space after an
+   icon that precedes text (e.g. "← Back"). */
+.lucide.ico-inline{margin-left:.35em}
+.lucide.ico-inline-l{margin-right:.35em}
+.rune-divider{display:flex;align-items:center;justify-content:center;gap:.6em}
+.rune-divider .lucide{width:18px;height:18px}
 
 /* ── PROJECT DETAIL PAGE ─────────────────────────────────────────────────
    Full case-study view shown when a project card is clicked. Built by
@@ -305,7 +317,7 @@ footer{text-align:center;padding:32px 40px;color:var(--fg3);font-family:'Cinzel'
 .pd-body strong{color:var(--accent);font-weight:600}
 .pd-highlights{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:24px}
 .pd-highlights li{font-size:17px;color:var(--fg2);padding-left:22px;position:relative;line-height:1.6}
-.pd-highlights li::before{content:'⚔';position:absolute;left:0;color:var(--accent2);font-size:12px;top:4px}
+.pd-highlights li::before{content:'';position:absolute;left:0;top:5px;width:13px;height:13px;background-color:var(--accent2);-webkit-mask:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%2214.5%2017.5%203%206%203%203%206%203%2017.5%2014.5%22%2F%3E%3Cline%20x1%3D%2213%22%20x2%3D%2219%22%20y1%3D%2219%22%20y2%3D%2213%22%2F%3E%3Cline%20x1%3D%2216%22%20x2%3D%2220%22%20y1%3D%2216%22%20y2%3D%2220%22%2F%3E%3Cline%20x1%3D%2219%22%20x2%3D%2221%22%20y1%3D%2221%22%20y2%3D%2219%22%2F%3E%3Cpolyline%20points%3D%2214.5%206.5%2018%203%2021%203%2021%206%2017.5%209.5%22%2F%3E%3Cline%20x1%3D%225%22%20x2%3D%229%22%20y1%3D%2214%22%20y2%3D%2218%22%2F%3E%3Cline%20x1%3D%227%22%20x2%3D%224%22%20y1%3D%2217%22%20y2%3D%2220%22%2F%3E%3Cline%20x1%3D%223%22%20x2%3D%225%22%20y1%3D%2219%22%20y2%3D%2221%22%2F%3E%3C%2Fsvg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%2214.5%2017.5%203%206%203%203%206%203%2017.5%2014.5%22%2F%3E%3Cline%20x1%3D%2213%22%20x2%3D%2219%22%20y1%3D%2219%22%20y2%3D%2213%22%2F%3E%3Cline%20x1%3D%2216%22%20x2%3D%2220%22%20y1%3D%2216%22%20y2%3D%2220%22%2F%3E%3Cline%20x1%3D%2219%22%20x2%3D%2221%22%20y1%3D%2221%22%20y2%3D%2219%22%2F%3E%3Cpolyline%20points%3D%2214.5%206.5%2018%203%2021%203%2021%206%2017.5%209.5%22%2F%3E%3Cline%20x1%3D%225%22%20x2%3D%229%22%20y1%3D%2214%22%20y2%3D%2218%22%2F%3E%3Cline%20x1%3D%227%22%20x2%3D%224%22%20y1%3D%2217%22%20y2%3D%2220%22%2F%3E%3Cline%20x1%3D%223%22%20x2%3D%225%22%20y1%3D%2219%22%20y2%3D%2221%22%2F%3E%3C%2Fsvg%3E") center/contain no-repeat}
 .pd-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
 .pd-tag{font-size:13px;font-family:'JetBrains Mono',monospace;padding:5px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:4px;color:var(--fg3)}
 /* Play / Source buttons at the bottom of the case study */
@@ -450,7 +462,7 @@ footer{text-align:center;padding:32px 40px;color:var(--fg3);font-family:'Cinzel'
 </section><section id="projects"><!-- Clickable project cards -> each opens its own detail page -->
   <div class="sec-eyebrow">// The Quests</div>
   <h2 class="sec-heading">Projects</h2>
-  <div class="rune-divider">✦ ✧ ✦</div>
+  <div class="rune-divider"><svg class="lucide" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path></svg><svg class="lucide" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path><path d="M20 3v4"></path><path d="M22 5h-4"></path><path d="M4 17v2"></path><path d="M5 18H3"></path></svg><svg class="lucide" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path></svg></div>
   <div class="proj-grid" id="proj-grid-el">
     <div class="proj-card" onclick="showPage('project',0);window.scrollTo(0,0)">
       <div class="proj-img"><img src="images/glocktopus/main-capsule.png" alt="Glocktopus"></div>
@@ -460,7 +472,7 @@ footer{text-align:center;padding:32px 40px;color:var(--fg3);font-family:'Cinzel'
         <div class="proj-role"><span>Lead Designer</span><span>Assistant Producer</span></div>
         <p class="proj-desc"><em style="color:var(--fg3);font-size:13px">Unreal Engine · Multiplayer Puzzle-Stealth · Aug 2025 – May 2026</em><br><br>Shipped on Steam as a 13-person capstone production in Unreal Engine. As Lead Designer &amp; Assistant Producer, I led level design across five environments, built and maintained the team’s design documentation hub, created Blueprint actors, applied &amp; created materials for environment art, and managed production infrastructure including the team’s LLC, business bank account, Steam account, and Steamworks setup.</p>
         <div class="proj-links">
-          <span class="proj-link primary" onclick="event.stopPropagation();showPage('project',0);window.scrollTo(0,0)">View Case Study ↗</span>
+          <span class="proj-link primary" onclick="event.stopPropagation();showPage('project',0);window.scrollTo(0,0)">View Project <svg class="lucide ico-inline" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></span>
           <a href="https://store.steampowered.com/app/4440410/GLOCKTOPUS/" class="proj-link" target="_blank" onclick="event.stopPropagation()">Play on Steam</a>
         </div>
       </div>
@@ -473,7 +485,7 @@ footer{text-align:center;padding:32px 40px;color:var(--fg3);font-family:'Cinzel'
         <div class="proj-role"><span>Solo Designer</span></div>
         <p class="proj-desc"><em style="color:var(--fg3);font-size:13px">Print-and-Play · Strategic Boss Rush Card Game · Oct – Dec 2024</em><br><br>Designed a tactical card game where players lead a team of adventurers to defeat rotating Boss Monsters. Emphasized strategic planning, resource management, and adaptability in gameplay.</p>
         <div class="proj-links">
-          <span class="proj-link primary" onclick="event.stopPropagation();showPage('project',1);window.scrollTo(0,0)">View Case Study ↗</span>
+          <span class="proj-link primary" onclick="event.stopPropagation();showPage('project',1);window.scrollTo(0,0)">View Project <svg class="lucide ico-inline" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></span>
           <a href="https://alternisray.itch.io/polyhueprototype" class="proj-link" target="_blank" onclick="event.stopPropagation()">Play on Itch.io</a>
         </div>
       </div>
@@ -486,7 +498,7 @@ footer{text-align:center;padding:32px 40px;color:var(--fg3);font-family:'Cinzel'
         <div class="proj-role"><span>Narrative Designer</span><span>Level Designer</span><span>Producer</span><span>Environment Artist</span></div>
         <p class="proj-desc"><em style="color:var(--fg3);font-size:13px">Unity · 2D Side-Scroller Beat 'em Up · May – Aug 2024</em><br><br>Designed and prototyped game sections focused on cohesive visuals and progressive difficulty. Created and balanced enemy types through playtesting. Integrated narrative elements through environmental storytelling and visual context.</p>
         <div class="proj-links">
-          <span class="proj-link primary" onclick="event.stopPropagation();showPage('project',2);window.scrollTo(0,0)">View Case Study ↗</span>
+          <span class="proj-link primary" onclick="event.stopPropagation();showPage('project',2);window.scrollTo(0,0)">View Project <svg class="lucide ico-inline" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></span>
           <a href="https://alternisray.itch.io/eldritch-confection" class="proj-link" target="_blank" onclick="event.stopPropagation()">Play on Itch.io</a>
         </div>
       </div>
@@ -499,7 +511,7 @@ footer{text-align:center;padding:32px 40px;color:var(--fg3);font-family:'Cinzel'
         <div class="proj-role"><span>Narrative Designer</span><span>Dialogue Writer</span><span>Card Designer</span></div>
         <p class="proj-desc"><em style="color:var(--fg3);font-size:13px">GameMaker · Narrative Card Battler RPG · Jan – Apr 2024</em><br><br>Planned and structured in-game events to align narrative pacing with storytelling goals. Wrote and edited dialogue for consistency in voice, theme, and emotional impact. Created card art maintaining visual cohesion with the established style guide.</p>
         <div class="proj-links">
-          <span class="proj-link primary" onclick="event.stopPropagation();showPage('project',3);window.scrollTo(0,0)">View Case Study ↗</span>
+          <span class="proj-link primary" onclick="event.stopPropagation();showPage('project',3);window.scrollTo(0,0)">View Project <svg class="lucide ico-inline" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></span>
           <a href="https://ghostlord79.itch.io/celestial-bodies" class="proj-link" target="_blank" onclick="event.stopPropagation()">Play on Itch.io</a>
         </div>
       </div>
@@ -512,7 +524,7 @@ footer{text-align:center;padding:32px 40px;color:var(--fg3);font-family:'Cinzel'
         <div class="proj-role"><span>Dungeon Master</span><span>Narrative Designer</span><span>World-Builder</span></div>
         <p class="proj-desc"><em style="color:var(--fg3);font-size:13px">D&amp;D 5E · Homebrew TTRPG Campaign · July 2023 – May 2025</em><br><br>Led a 17-session homebrew D&amp;D campaign in an original high-fantasy world. Developed custom mechanics, extensive lore, and session planning. Themes of moral ambiguity and post-divine tragedy.</p>
         <div class="proj-links">
-          <span class="proj-link primary" onclick="event.stopPropagation();showPage('project',4);window.scrollTo(0,0)">View Case Study ↗</span>
+          <span class="proj-link primary" onclick="event.stopPropagation();showPage('project',4);window.scrollTo(0,0)">View Project <svg class="lucide ico-inline" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></span>
           
         </div>
       </div>
@@ -520,19 +532,19 @@ footer{text-align:center;padding:32px 40px;color:var(--fg3);font-family:'Cinzel'
 </section><section id="writing"><!-- Short-story / lore list with external "Read" links -->
   <div class="sec-eyebrow">// The Lore</div>
   <h2 class="sec-heading">Writing</h2>
-  <div class="rune-divider">✦ ✧ ✦</div>
+  <div class="rune-divider"><svg class="lucide" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path></svg><svg class="lucide" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path><path d="M20 3v4"></path><path d="M22 5h-4"></path><path d="M4 17v2"></path><path d="M5 18H3"></path></svg><svg class="lucide" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path></svg></div>
   <div class="writing-grid" id="writing-grid-el">
     <div class="writing-card">
       <div><div class="writing-title">Aris’s Loop</div><div class="writing-meta">Short Story · 4,602 words</div><p class="writing-desc">A piece set in the past of the D&amp;D campaign world of Eusedia, recounting the final moments of a civilization through the eyes of the person who unknowingly caused its destruction.</p></div>
-      <a href="https://drive.google.com/file/d/1s9YmuO3cRndI1quxSLUkS7Uy-V2nEQlt/view?usp=sharing" class="writing-link" target="_blank">Read ↗</a>
+      <a href="https://drive.google.com/file/d/1s9YmuO3cRndI1quxSLUkS7Uy-V2nEQlt/view?usp=sharing" class="writing-link" target="_blank">Read <svg class="lucide ico-inline" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a>
     </div>
     <div class="writing-card">
       <div><div class="writing-title">Gamebook</div><div class="writing-meta">Fighting Fantasy-Style Gamebook · 35,180 words</div><p class="writing-desc">Inspired by the Epic of Gilgamesh — an exercise in matching player choice to compelling narrative while building an engaging game system.</p></div>
-      <a href="https://drive.google.com/file/d/1W9rUIwz6Z-DqgBLzA3mGALbu6R2Y7NFg/view?usp=sharing" class="writing-link" target="_blank">Read ↗</a>
+      <a href="https://drive.google.com/file/d/1W9rUIwz6Z-DqgBLzA3mGALbu6R2Y7NFg/view?usp=sharing" class="writing-link" target="_blank">Read <svg class="lucide ico-inline" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a>
     </div>
     <div class="writing-card">
       <div><div class="writing-title">Five Minutes</div><div class="writing-meta">Short Story · 1,593 words</div><p class="writing-desc">Broken into small sections to encapsulate tiny emotional moments within the last five minutes and the first five minutes of a man’s life.</p></div>
-      <a href="https://drive.google.com/file/d/16WoPaNoVO_SrUdpT5XN_ISfebgPVJs7x/view?usp=sharing" class="writing-link" target="_blank">Read ↗</a>
+      <a href="https://drive.google.com/file/d/16WoPaNoVO_SrUdpT5XN_ISfebgPVJs7x/view?usp=sharing" class="writing-link" target="_blank">Read <svg class="lucide ico-inline" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a>
     </div>
     <div class="writing-card">
       <div><div class="writing-title">Eusedia — D&amp;D Campaign</div><div class="writing-meta">Narrative Design / Worldbuilding · 17 Sessions</div><p class="writing-desc">Led a 17-session tabletop RPG campaign focused on moral ambiguity and the complexities of good vs. evil. Custom mechanics for chase sequences and puzzle-solving. Extensive worldbuilding, lore, and session planning.</p></div>
@@ -559,14 +571,14 @@ footer{text-align:center;padding:32px 40px;color:var(--fg3);font-family:'Cinzel'
     <div class="exp-item" id="exp-0">
       <div class="exp-header" onclick="toggleExp(0)">
         <div><div class="exp-company">Best Buy — Geek Squad</div><div class="exp-role">Consultation Agent</div></div>
-        <div style="text-align:right;flex-shrink:0"><div class="exp-date">Oct 2024 – Present</div><div class="exp-chevron">▾</div></div>
+        <div style="text-align:right;flex-shrink:0"><div class="exp-date">Oct 2024 – Present</div><div class="exp-chevron"><svg class="lucide" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></div></div>
       </div>
       <div class="exp-body"><p class="exp-desc">Providing frontline technical support and client service.</p><ul class="exp-highlights"><li>Manage work orders and ensure timely, accurate delivery of service</li><li>Coordinate with in-store and remote teams to maintain service quality</li></ul><div class="exp-tech"><span class="tech-tag">Client Communication</span><span class="tech-tag">Technical Support</span><span class="tech-tag">Logistics</span></div></div>
     </div>
     <div class="exp-item" id="exp-2">
       <div class="exp-header" onclick="toggleExp(2)">
         <div><div class="exp-company">Best Buy — Geek Squad</div><div class="exp-role">Advanced Repair Agent</div></div>
-        <div style="text-align:right;flex-shrink:0"><div class="exp-date">Jan 2026 – Present</div><div class="exp-chevron">▾</div></div>
+        <div style="text-align:right;flex-shrink:0"><div class="exp-date">Jan 2026 – Present</div><div class="exp-chevron"><svg class="lucide" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></div></div>
       </div>
       <div class="exp-body"><p class="exp-desc">Diagnose and repair computers, devices, and consumer electronics for customers</p><ul class="exp-highlights"><li>Perform hardware and software troubleshooting to resolve technical issues efficiently</li><li>Maintain accurate service records and repair documentation</li><li>Communicate repair solutions and recommendations to customers in a professional manner</li><li>Collaborate with team members to ensure high-quality service and customer satisfaction</li></ul><div class="exp-tech"><span class="tech-tag">Client Communication</span><span class="tech-tag">Technical Support</span><span class="tech-tag">Logistics</span><span class="tech-tag">Hardware Repair</span><span class="tech-tag">Software Repair</span><span class="tech-tag">Virus Removal</span><span class="tech-tag">Data Transfer</span></div></div>
     </div></div></div>
@@ -574,7 +586,7 @@ footer{text-align:center;padding:32px 40px;color:var(--fg3);font-family:'Cinzel'
     <div class="exp-item" id="exp-1">
       <div class="exp-header" onclick="toggleExp(1)">
         <div><div class="exp-company">Dustbath Studios (Glocktopus)</div><div class="exp-role">Lead Designer + Asst. Producer</div></div>
-        <div style="text-align:right;flex-shrink:0"><div class="exp-date">Nov 2025 – Present</div><div class="exp-chevron">▾</div></div>
+        <div style="text-align:right;flex-shrink:0"><div class="exp-date">Nov 2025 – Present</div><div class="exp-chevron"><svg class="lucide" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></div></div>
       </div>
       <div class="exp-body"><p class="exp-desc">Sole legal founder of the studio’s LLC, though built and run in the spirit of a co-founded studio with a 13-person capstone team; balanced Lead Designer duties with production and business operations for the team’s game, Glocktopus.</p><ul class="exp-highlights"><li>Founded and legally established Dustbath Studios LLC, including the business bank account and Steam/Steamworks store page</li><li>Led level design across five environments, from whitebox blockouts through dressed, playable levels with documented puzzle flows</li><li>Built and maintained the team’s Design Documentation Hub and Microsoft Loop task-assignment system to keep a 13-person team organized</li><li>Balanced Lead Designer responsibilities with Assistant Producer duties across the full production cycle</li></ul><div class="exp-tech"><span class="tech-tag">Team Leadership</span><span class="tech-tag">Production</span><span class="tech-tag">Documentation</span><span class="tech-tag">Microsoft Loop</span><span class="tech-tag">Steam Publishing</span><span class="tech-tag">Level Design</span><span class="tech-tag">Puzzle Design</span><span class="tech-tag">QA &amp; Playtesting</span><span class="tech-tag">Perforce</span><span class="tech-tag">Unreal Engine</span><span class="tech-tag">Live Ops</span></div></div>
     </div></div></div></div>
@@ -584,7 +596,7 @@ footer{text-align:center;padding:32px 40px;color:var(--fg3);font-family:'Cinzel'
   <div class="about-grid">
     <div>
       <div class="about-bio" id="about-bio-el"><p>Thanks for taking a look around. Here’s a little bit about me! I’m a <strong>Game Designer</strong> &amp; <strong>Narrative Designer</strong> currently based in California. I love interactive storytelling and creating gameplay moments that stick with players long after the screen fades to black. I’m honing my skills through solo projects and collaborative work to contribute to innovative, story-rich games.</p><p style="margin-top:16px">I have two bachelor’s degrees from the <strong>University of Utah</strong> — one in English and one in Game Design — which let me focus specifically on game-based narrative and level design. My background in writing and literature gives me a strong foundation for crafting and understanding what makes compelling characters, meaningful dialogue, and immersive environments that support player-driven storytelling.</p><p style="margin-top:16px">Storytelling has always been at the heart of who I am. Outside of design work, I run TTRPG campaigns for friends and family using systems like Dungeons &amp; Dragons &amp; Daggerheart and explore the mechanics of other tabletop RPGs in my spare time. I constantly stay engaged with narrative systems and game design from different angles, whether writing short stories, poems, worldbuilding for my own projects, or consuming a variety of books and media to better understand how professionals craft their stories. I’m always thinking about what it means to be a good storyteller and how I can improve those qualities in myself.</p><p style="margin-top:16px">At the core of my design philosophy is a belief that the most powerful stories in games aren’t just told, they’re lived. Whether it’s the layout of a dungeon, a forgotten ruin tucked into the world, or the subtle emotional beats in a conversation, I strive to build experiences that reward curiosity and invite emotional investment. I want each player’s journey to feel personal and meaningful, because a story isn’t just what happens in games — player choices drive it.</p></div>
-      <div class="about-links" id="about-links-el"><a href="https://www.linkedin.com/in/ray-sarlatte421/" class="social-btn" target="_blank">💼 LinkedIn</a><a href="mailto:rsarlatte421@gmail.com" class="social-btn" target="_blank">✉ Email</a></div>
+      <div class="about-links" id="about-links-el"><a href="https://www.linkedin.com/in/ray-sarlatte421/" class="social-btn" target="_blank"><svg class="lucide ico-inline" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path><rect width="20" height="14" x="2" y="6" rx="2"></rect></svg> LinkedIn</a><a href="mailto:rsarlatte421@gmail.com" class="social-btn" target="_blank"><svg class="lucide ico-inline" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg> Email</a></div>
     </div>
     <div class="about-side">
       <div class="about-photo-wrap" id="about-photo-wrap-el" style="display: block;">
@@ -600,7 +612,7 @@ footer{text-align:center;padding:32px 40px;color:var(--fg3);font-family:'Cinzel'
   <div class="contact-box">
     <p class="contact-tagline" id="contact-tagline-el">Looking to collaborate, hire, or just talk shop about games, stories, and the worlds between? My raven is always in flight.</p>
     <a class="contact-email" id="contact-email-el" href="mailto:rsarlatte421@gmail.com">rsarlatte421@gmail.com</a>
-    <div class="contact-links" id="contact-links-el"><a href="https://www.linkedin.com/in/ray-sarlatte421/" class="social-btn" target="_blank">💼 LinkedIn</a><a href="mailto:rsarlatte421@gmail.com" class="social-btn" target="_blank">✉ Email</a></div>
+    <div class="contact-links" id="contact-links-el"><a href="https://www.linkedin.com/in/ray-sarlatte421/" class="social-btn" target="_blank"><svg class="lucide ico-inline" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path><rect width="20" height="14" x="2" y="6" rx="2"></rect></svg> LinkedIn</a><a href="mailto:rsarlatte421@gmail.com" class="social-btn" target="_blank"><svg class="lucide ico-inline" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg> Email</a></div>
   </div>
 </section><footer><span id="footer-el">· Ray Sarlatte · Game Designer · Narrative Designer · Writer ·</span></footer></div><!-- /page-home -->
 
@@ -613,45 +625,41 @@ footer{text-align:center;padding:32px 40px;color:var(--fg3);font-family:'Cinzel'
 <div id="page-project" class="page">
   <div class="proj-detail" id="proj-detail-content">
     <div class="pd-header-row">
-      <div class="pd-back" onclick="showPage('home');scrollToSection('projects')">← Back to Projects</div>
+      <div class="pd-back" onclick="showPage('home');scrollToSection('projects')"><svg class="lucide ico-inline-l" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg> Back to Projects</div>
       
     </div>
-    <div class="pd-eyebrow">D&amp;D 5E · Homebrew TTRPG Campaign</div>
-    <h1 class="pd-title">Eusedia</h1>
-    <div class="pd-roles"><span class="pd-role-tag">Dungeon Master</span><span class="pd-role-tag">Narrative Designer</span><span class="pd-role-tag">World-Builder</span></div>
+    <div class="pd-eyebrow">Unreal Engine · Multiplayer Puzzle-Stealth</div>
+    <h1 class="pd-title">Glocktopus</h1>
+    <div class="pd-roles"><span class="pd-role-tag">Lead Designer</span><span class="pd-role-tag">Assistant Producer</span></div>
     <!-- Type / Team / Date meta bar -->
     <div class="pd-meta-bar">
-      <div class="pd-meta-item"><div class="pd-meta-label">Type</div><div class="pd-meta-val">D&amp;D 5E</div></div>
-      <div class="pd-meta-item"><div class="pd-meta-label">Team</div><div class="pd-meta-val">Solo DM</div></div>
-      <div class="pd-meta-item"><div class="pd-meta-label">Date</div><div class="pd-meta-val">July 2023 – May 2025</div></div>
+      <div class="pd-meta-item"><div class="pd-meta-label">Type</div><div class="pd-meta-val">Unreal Engine</div></div>
+      <div class="pd-meta-item"><div class="pd-meta-label">Team</div><div class="pd-meta-val">Capstone — Team of 13 (Dustbath Studios)</div></div>
+      <div class="pd-meta-item"><div class="pd-meta-label">Date</div><div class="pd-meta-val">Aug 2025 – May 2026</div></div>
     </div>
     <!-- Hero image, or a placeholder hint if none is set yet -->
-    <img class="pd-hero-img" src="images/eusedia/eusedia-hero.png" alt="Eusedia">
+    <img class="pd-hero-img" src="images/glocktopus/main-capsule.png" alt="Glocktopus">
     <div class="pd-section-head">Overview</div>
-    <div class="pd-body"><p><strong>Eusedia</strong> is a high-fantasy TTRPG setting steeped in myth and tragedy — yet much of its vast history has long been forgotten. The tales of major heroes have already been told: sung by bards, carved in stone, and buried beneath centuries of dust. But now, the stirrings of a second Cataclysm begin to shake the world once more.</p><p>*The gods are gone. The myths are buried. But fate has not yet finished writing.*</p><p>In this post-divine age, where the gods have been banished and ancient truths lie fractured, a motley crew of unknown adventurers touched by fate are brought together to uncover the growing darkness.</p><p><strong>Key Themes:</strong>
-- <strong>Forgotten History:</strong> Players uncover mythic truths buried under generations of silence
-- <strong>Fate-Touched Journeys:</strong> Ordinary people thrust into extraordinary roles by forces unseen
-- <strong>Post-Divine Epic:</strong> Magic lingers, gods are gone, but their shadows still shape the land
-- <strong>Rising Darkness:</strong> Whispers of a second Cataclysm spread</p></div>
+    <div class="pd-body"><p><strong>Glocktopus</strong> is a multiplayer puzzle-stealth game in which players control a gun-wielding octopus navigating enemy-filled environments through stealth, misdirection, and creative puzzle solutions. Developed with a team of 13 over two capstone semesters, it shipped on Steam.</p><p>As <strong>Lead Designer</strong> &amp; <strong>Assistant Producer</strong>, my work spanned design, production, environment art, Blueprint scripting, and QA through every phase of development, from the first tutorial-room blockout through Beta, Gold, and Live Ops.</p><p>I built the team’s <strong>Design Documentation Hub</strong> from scratch, linked it to Microsoft Loop and Discord for team-wide access, added a formatting guideline for consistency, and maintained an update log for accountability. I also created detailed design entries for all five levels: Entrance Hall, Tropical River, Ocean, Forest, and the Vertical Slice. Each entry included the room’s purpose, layout overviews, comprehensive asset lists with items that are currently implemented in the project and those still needed, interaction beats, and puzzle flows.</p><p><strong>Level Design</strong> was my largest single contribution. Starting with the Tutorial Room, I produced whitebox and colored blockouts that iterated toward final layouts. I led the team’s vertical-slice brainstorming session. I turned the collaborative sketch into a detailed isometric layout marking key interactions and event triggers, and later documented it with visual progression screenshots. I designed Level 2’s Snapping Turtle guard-patrol puzzle. I rebuilt and expanded the Entrance Hall (Level 4). I converted Level 3 from blockout to a dressed, playable level.</p><p>I contributed to <strong>environment art</strong> by creating materials using textures from our art team, including triplanar-projected walls, floors, and sand sections; custom signage using artist-made 2D textures; and glass materials. I also modeled static meshes, including Stingray touchpool floor and wall assets, Entrance Hall geometry, and a floor mesh to fix physics clipping, and populated every level with foliage, aquatic plants, fish and jellyfish Blueprint instances on spline paths, bubble VFX, and lighting.</p><p>On the <strong>Blueprint scripting</strong> side, I built and shipped several actors: BP_Box (pushable object tutorial, later tuned for physics feel), BP_VentCover (collision-modified level exit), and BP_Jellyfish (configurable rotating actor with designer-exposed mesh and material variables, later extended by engineers to react to player gunfire. I also implemented BP_GoToNextLevel transition triggers, an on-rail camera system in the Ocean Level, puzzle cameras in the Entrance Hall, and a fix for a wall-climbing spline rotation bug that appeared in multiple levels. I kept the project organized by restructuring level Outliners and the Content Browser as the project scaled.</p><p>As <strong>Assistant Producer</strong>, I set up the team’s LLC through UtahID and established the business bank account, created the company email, Steam, and Steamworks accounts, built and submitted the store page for review, maintained the Loop issue-triage board, and pushed patch updates with community-voice patch notes during Live Ops.</p></div>
     <!-- Key Contributions, Tools & Skills, and Gallery are all optional — each only
          renders if that data actually exists, so empty projects don't show blank headers -->
-    <div class="pd-section-head">Key Contributions</div><ul class="pd-highlights"><li>Led a 17-session tabletop RPG campaign focused on moral ambiguity and good vs. evil complexity</li><li>Developed custom mechanics for chase sequences and puzzle-solving to promote player agency</li><li>Managed extensive worldbuilding, lore, and session planning using Obsidian</li><li>Integrated character and rule content with D&amp;D Beyond for seamless session management</li></ul>
-    
-    
-    
-    <div class="pd-section-head">Tools &amp; Skills</div><div class="pd-tags"><span class="pd-tag">D&amp;D 5E</span><span class="pd-tag">World-Building</span><span class="pd-tag">Narrative Design</span><span class="pd-tag">Custom Mechanics</span><span class="pd-tag">Session Planning</span><span class="pd-tag">Obsidian</span><span class="pd-tag">Dungeon Master</span></div>
-    <div class="pd-section-head">Gallery</div><div class="pd-gallery"><figure><img src="images/eusedia/eusedia-obsidian-graph.png" alt="Obsidian Graph View — Campaign Notes &amp; Lore" loading="lazy"><figcaption>Obsidian Graph View — Campaign Notes &amp; Lore</figcaption></figure></div>
+    <div class="pd-section-head">Key Contributions</div><ul class="pd-highlights"><li>Led level design across five level environments (Entrance Hall, Tropical River, Ocean, Forest, Vertical Slice) — from whitebox blockouts and isometric layout sketches through dressed, playable levels with documented interaction and puzzle flows.</li><li>Built and maintained the team’s Design Documentation Hub — formatting guidelines, update log, per-level templates, Puzzle Design doc (complexity ratings + synergy examples), Audio SFX list, and Loop task assignments</li><li>Shipped Blueprint actors BP_Box, BP_VentCover, and BP_Jellyfish; implemented level-transition triggers, an on-rail Ocean camera, and Entrance Hall puzzle cameras; fixed spline, collision, and physics-clipping bugs</li><li>Created hands-on environment art: custom materials (sand, triplanar, signage, glass), modeled static meshes, and dressed levels with foliage, spline-driven fish/jellyfish, bubble VFX, and lighting</li><li>Served as a lead internal playtester — ran a 6+ hour Discord testing marathon during Sprint 5, captured commentary bug-report videos, and verified engineering fixes against design intent.</li><li>Managed production: set up the LLC and business bank account, Steam/Steamworks accounts and store page, maintained the Loop issue-triage board, and pushed Live Ops patches with community-voice patch notes.</li><li>Cut the under-construction level late to hit the release date — scoped as a candidate for a future update.</li></ul>
+    <div class="pd-section-head">Origin &amp; Inspiration</div><div class="pd-body"><p><strong>Glocktopus</strong> began as a capstone reference-game project, where the team built around a core multiplayer puzzle-stealth concept. The game was heavily inspired by <strong>Untitled Goose Game</strong> &amp; <strong>Octodad</strong>. The design goal was to create an experience in which stealth, misdirection, and environmental puzzles worked cohesively to enhance the intended experience of creative puzzle-solving and comedic environmental interactions.</p><p>My role as <strong>Lead Designer</strong> meant I was involved in shaping that vision from day one: establishing how puzzle complexity should be structured, how levels should guide player attention without explicit direction, and how documentation could keep a 13-person team aligned across two full semesters of parallel development.</p></div>
+    <div class="pd-section-head">Challenges &amp; Problem-Solving</div><div class="pd-body"><p><strong>Scope creep</strong> was the project’s most persistent challenge. Every sprint introduced features that sounded valuable in isolation but added engineering complexity or diluted the game’s identity. Managing it meant actively trimming the puzzle toolset early — cutting overly ambitious tools (glider/umbrella, shovel, Tommy gun) to keep the focus on NPC-driven puzzle design — and pushing back during design reviews rather than assuming scope would manage itself. Late in production, the under-construction level was cut entirely to protect the release date.</p><p><strong>Version control conflicts</strong> caused the Tropical River level to need a complete rebuild from scratch mid-production; I duplicated and restored it as a new version and continued the work there. An Unreal static-mesh save bug at one point also blocked committing changes to the repo — the kind of pipeline friction that reinforced the value of disciplined Perforce hygiene and Outliner/folder organization, which I took on across every level I touched.</p><p><strong>Technical self-sufficiency</strong> was a personal limitation early on. I could identify bugs in-engine but was initially hesitant to fix them for fear of breaking engineers’ systems — at one point I modified BP_Clam’s collision, then reverted my changes to stay out of the engineers’ way. Taking Intro to Unreal Scripting concurrently gave me enough Blueprint fluency to become meaningfully self-sufficient in the second half of production: building actors, tuning physics, fixing splines, and implementing cameras without blocking the engineering team.</p><p><strong>Narrative integration</strong> suffered from late scoping. The in-game comics and story materials were assigned too far into production, leaving insufficient time for revision and making the narrative feel underdeveloped relative to the rest of the game.</p></div>
+    <div class="pd-section-head">Retrospective</div><div class="pd-body"><p><strong>Design for modularity from the start.</strong> Both the asset pipeline and puzzle design philosophy needed modular thinking earlier. Non-modular puzzles and one-off meshes created compounding workloads — every level required custom solutions instead of drawing from a shared toolkit. A smaller set of reusable puzzle components and standardized modular assets would have reduced engineering burden, simplified tutorialization, and enabled faster iteration in later sprints.</p><p><strong>Lock narrative deliverables earlier.</strong> The in-game comics and story materials were scoped too late, leaving our 2D artists without a full production runway. A hard deadline, even just for sketches of all required comics in the first two sprints, would have given us time for revisions and made the narrative feel more genuinely integrated into gameplay, as artists would have been able to flex into other tasks with the extra time gained.</p><p><strong>Apply a stricter ‘does this serve the experience?’ filter at every design review.</strong> Asking that question explicitly and consistently — not just when things got too complex to implement — would have produced a smaller, more cohesive feature set with more polish time per system.</p><p><strong>Learn Blueprints well enough to be self-sufficient from day one.</strong> The time I spent unable to fix minor engine issues myself slowed iteration and added unnecessary pressure on the engineering team. Blueprint fluency as a designer isn’t optional — it’s what lets you communicate precisely, test independently, and stay unblocked.</p></div>
+    <div class="pd-section-head">Tools &amp; Skills</div><div class="pd-tags"><span class="pd-tag">Unreal Engine</span><span class="pd-tag">Level Design</span><span class="pd-tag">Blueprint Scripting</span><span class="pd-tag">Environment Art</span><span class="pd-tag">Puzzle Design</span><span class="pd-tag">Camera Design</span><span class="pd-tag">GDD</span><span class="pd-tag">QA &amp; Playtesting</span><span class="pd-tag">Perforce</span><span class="pd-tag">Production</span><span class="pd-tag">Steam / Steamworks</span><span class="pd-tag">Team Capstone</span></div>
+    <div class="pd-section-head">Gallery</div><div class="pd-gallery"><figure><img src="images/glocktopus/level1isolayout.png" alt="Level 1 Iso Layout" loading="lazy"><figcaption>Level 1 Iso Layout</figcaption></figure><figure><img src="images/glocktopus/level1blockout.png" alt="Level 1 Blockout" loading="lazy"><figcaption>Level 1 Blockout</figcaption></figure><figure><img src="images/glocktopus/underconstructionlevellayoutbrainstorm.png" alt="Under-construction Level Layout Brainstorm" loading="lazy"><figcaption>Under-construction Level Layout Brainstorm</figcaption></figure><figure><img src="images/glocktopus/underconstructionlevellayoutiso.png" alt="Under-construction Level Iso Layout" loading="lazy"><figcaption>Under-construction Level Iso Layout</figcaption></figure><figure><img src="images/glocktopus/gold1leveldesignbefore.png" alt="Gold 1 · Level Design Before" loading="lazy"><figcaption>Gold 1 · Level Design Before</figcaption></figure><figure><img src="images/glocktopus/gold1leveldesignafter.png" alt="Gold 1 · Level Design After" loading="lazy"><figcaption>Gold 1 · Level Design After</figcaption></figure><figure><img src="images/glocktopus/gold1splinefixes.png" alt="Gold 1 · Spline Fixes" loading="lazy"><figcaption>Gold 1 · Spline Fixes</figcaption></figure><figure><img src="images/glocktopus/gold1turtlestandee.png" alt="Gold 1 · Turtle Standee" loading="lazy"><figcaption>Gold 1 · Turtle Standee</figcaption></figure><figure><img src="images/glocktopus/gold2photo1.png" alt="Gold 2 · Progress 1" loading="lazy"><figcaption>Gold 2 · Progress 1</figcaption></figure><figure><img src="images/glocktopus/gold2photo2.png" alt="Gold 2 · Progress 2" loading="lazy"><figcaption>Gold 2 · Progress 2</figcaption></figure><figure><img src="images/glocktopus/gold2trlevelphoto.png" alt="Gold 2 · Tropical River Level" loading="lazy"><figcaption>Gold 2 · Tropical River Level</figcaption></figure><figure><img src="images/glocktopus/gold2forestlevelphoto.png" alt="Gold 2 · Forest Level" loading="lazy"><figcaption>Gold 2 · Forest Level</figcaption></figure><figure><img src="images/glocktopus/gold2materialphoto1.png" alt="Gold 2 · Material 1" loading="lazy"><figcaption>Gold 2 · Material 1</figcaption></figure><figure><img src="images/glocktopus/gold2materialphoto2.png" alt="Gold 2 · Material 2" loading="lazy"><figcaption>Gold 2 · Material 2</figcaption></figure><figure><img src="images/glocktopus/gold2bpventcoverphoto.png" alt="Gold 2 · BP_VentCover" loading="lazy"><figcaption>Gold 2 · BP_VentCover</figcaption></figure><figure><img src="images/glocktopus/orangeoutlineonpipe.png" alt="Orange Outline On Pipe" loading="lazy"><figcaption>Orange Outline On Pipe</figcaption></figure><figure><img src="images/glocktopus/cameraadjustmentsbeta1.png" alt="Beta 1 · Camera Adjustments" loading="lazy"><figcaption>Beta 1 · Camera Adjustments</figcaption></figure><figure><img src="images/glocktopus/finalspprintentrancehallenvironment1.png" alt="Final Sprint · Entrance Hall Environment 1" loading="lazy"><figcaption>Final Sprint · Entrance Hall Environment 1</figcaption></figure><figure><img src="images/glocktopus/finalspprintentrancehallenvironment2.png" alt="Final Sprint · Entrance Hall Environment 2" loading="lazy"><figcaption>Final Sprint · Entrance Hall Environment 2</figcaption></figure><figure><img src="images/glocktopus/finalspprintentrancehallenvironment3.png" alt="Final Sprint · Entrance Hall Environment 3" loading="lazy"><figcaption>Final Sprint · Entrance Hall Environment 3</figcaption></figure><figure><img src="images/glocktopus/finalspprintentrancehallenvironment4.png" alt="Final Sprint · Entrance Hall Environment 4" loading="lazy"><figcaption>Final Sprint · Entrance Hall Environment 4</figcaption></figure><figure><img src="images/glocktopus/finalsprintnewtanklayoutphoto.png" alt="Final Sprint · New Tank Layout" loading="lazy"><figcaption>Final Sprint · New Tank Layout</figcaption></figure><figure><img src="images/glocktopus/finalsprintjellyfish-fishplacementphoto.png" alt="Final Sprint · Jellyfish &amp; Fish Placement" loading="lazy"><figcaption>Final Sprint · Jellyfish &amp; Fish Placement</figcaption></figure><figure><img src="images/glocktopus/finalsprintleveltransitionphoto.png" alt="Final Sprint · Level Transition" loading="lazy"><figcaption>Final Sprint · Level Transition</figcaption></figure><figure><img src="images/glocktopus/finalsprintbeforematerialfixesphoto.png" alt="Final Sprint · Material Fixes (Before)" loading="lazy"><figcaption>Final Sprint · Material Fixes (Before)</figcaption></figure><figure><img src="images/glocktopus/finalsprintaftermaterialfixesphoto.png" alt="Final Sprint · Material Fixes (After)" loading="lazy"><figcaption>Final Sprint · Material Fixes (After)</figcaption></figure><figure><img src="images/glocktopus/finalsprintmaterialissuepuddles.png" alt="Final Sprint · Material Issue Puddles" loading="lazy"><figcaption>Final Sprint · Material Issue Puddles</figcaption></figure><figure><img src="images/glocktopus/finalsprintnewfloorclippingfixphoto.png" alt="Final Sprint · Stingray Pool Mesh Edit &amp; On-Rail Camera Edit" loading="lazy"><figcaption>Final Sprint · Stingray Pool Mesh Edit &amp; On-Rail Camera Edit</figcaption></figure><figure><img src="images/glocktopus/finalsprintforestlevelphoto1.png" alt="Final Sprint · Forest Level 1" loading="lazy"><figcaption>Final Sprint · Forest Level 1</figcaption></figure><figure><img src="images/glocktopus/finalsprintforestlevelphoto2.png" alt="Final Sprint · Forest Level 2" loading="lazy"><figcaption>Final Sprint · Forest Level 2</figcaption></figure><figure><img src="images/glocktopus/finalsprintblueprintgraphjellyfishphoto.png" alt="Final Sprint · Blueprint Graph Jellyfish" loading="lazy"><figcaption>Final Sprint · Blueprint Graph Jellyfish</figcaption></figure></div>
     
     
     <!-- Play (label is editable per-project) and Source links -->
     <div class="pd-links">
-      
+      <a href="https://store.steampowered.com/app/4440410/GLOCKTOPUS/" class="btn-primary" target="_blank">Play on Steam <svg class="lucide ico-inline" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a>
       
     </div>
     <!-- Prev/Next project navigation -->
     <div class="pd-nav">
-      <div class="pd-nav-btn" onclick="renderProjectDetail(3);window.scrollTo(0,0)">← Celestial Bodies</div>
       <div></div>
+      <div class="pd-nav-btn" onclick="renderProjectDetail(1);window.scrollTo(0,0)">PolyHue <svg class="lucide ico-inline" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></div>
     </div>
   </div>
 </div>
@@ -660,6 +668,43 @@ footer{text-align:center;padding:32px 40px;color:var(--fg3);font-family:'Cinzel'
 </div><!-- /site-wrap -->
 
 <script>
+// ═══════════════════════════════════════════════════════════════
+// LUCIDE ICON SYSTEM
+// ═══════════════════════════════════════════════════════════════
+// Inline SVG icons from Lucide (https://lucide.dev), used in place of unicode/emoji glyphs
+// for crisp, consistent iconography that inherits text color. Lucide is ISC-licensed:
+//
+//   ISC License — Copyright (c) for portions of Lucide are held by Cole Bemis 2013-2022 as
+//   part of Feather (MIT). All other copyright (c) for Lucide are held by Lucide Contributors
+//   2022. Free for personal and commercial use; no visible attribution required.
+//
+// LUCIDE_ICONS maps a name to that icon's inner SVG markup (the raw <path>/<line>/etc from
+// Lucide's standard 24×24, stroke-width-2, round-cap definitions). lucideIcon(name, opts)
+// wraps it in a themed <svg>. Icons inherit currentColor by default, so an icon placed inside
+// an element colored gold/accent picks up that color automatically — preserving the original
+// emoji coloring. Pass {size} to override the 1em default or {cls} to add a CSS class.
+const LUCIDE_ICONS = {
+  'arrow-up-right': '<path d="M7 7h10v10"/><path d="M7 17 17 7"/>',
+  'arrow-left': '<path d="m12 19-7-7 7-7"/><path d="M19 12H5"/>',
+  'arrow-right': '<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>',
+  'chevron-down': '<path d="m6 9 6 6 6-6"/>',
+  'mail': '<rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>',
+  'briefcase': '<path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/><rect width="20" height="14" x="2" y="6" rx="2"/>',
+  'sparkle': '<path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/>',
+  'sparkles': '<path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/><path d="M4 17v2"/><path d="M5 18H3"/>',
+  'swords': '<polyline points="14.5 17.5 3 6 3 3 6 3 17.5 14.5"/><line x1="13" x2="19" y1="19" y2="13"/><line x1="16" x2="20" y1="16" y2="20"/><line x1="19" x2="21" y1="21" y2="19"/><polyline points="14.5 6.5 18 3 21 3 21 6 17.5 9.5"/><line x1="5" x2="9" y1="14" y2="18"/><line x1="7" x2="4" y1="17" y2="20"/><line x1="3" x2="5" y1="19" y2="21"/>'
+};
+// Returns an inline <svg> string for the named icon. Defaults to 1em square so it scales with
+// surrounding text; inherits currentColor. `cls` adds an extra class (e.g. for spacing).
+function lucideIcon(name, opts){
+  opts = opts || {};
+  const inner = LUCIDE_ICONS[name];
+  if (!inner) return '';
+  const size = opts.size || '1em';
+  const cls = opts.cls ? ' ' + opts.cls : '';
+  return '<svg class="lucide' + cls + '" xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + inner + '</svg>';
+}
+
 // ═══════════════════════════════════════════════════════════════
 // SECRET KEY COMBO STATE
 // ═══════════════════════════════════════════════════════════════
@@ -712,12 +757,12 @@ let data = {
       {
         "label": "LinkedIn",
         "url": "https://www.linkedin.com/in/ray-sarlatte421/",
-        "icon": "💼"
+        "icon": "briefcase"
       },
       {
         "label": "Email",
         "url": "mailto:rsarlatte421@gmail.com",
-        "icon": "✉"
+        "icon": "mail"
       }
     ],
     "photoUrl": "images/about/profpic2026.jpg",
@@ -1577,7 +1622,15 @@ function renderSite() {
   }</div>` : '';
 
   // ── Social links — reused in both the About section and the Contact section ──
-  const socialHTML = data.about.socials.map(s=>`<a href="${s.url}" class="social-btn" target="_blank">${s.icon} ${s.label}</a>`).join('');
+  // Social buttons appear in both the About section and the Contact section, built from the
+  // same data.about.socials list. Each entry's `icon` field may be a Lucide icon name (e.g.
+  // "briefcase", "mail") — rendered as an inline SVG — or any other string (e.g. an emoji),
+  // which is shown as-is. This keeps the editor's Icon field flexible: type a Lucide name for
+  // a crisp vector, or paste an emoji/character for anything Lucide doesn't cover.
+  const socialHTML = data.about.socials.map(s=>{
+    const ic = LUCIDE_ICONS[s.icon] ? lucideIcon(s.icon, {cls:'ico-inline'}) : esc(s.icon);
+    return `<a href="${s.url}" class="social-btn" target="_blank">${ic} ${s.label}</a>`;
+  }).join('');
   document.getElementById('about-links-el').innerHTML = socialHTML;
   document.getElementById('contact-links-el').innerHTML = socialHTML;
 
@@ -1595,7 +1648,7 @@ function renderSite() {
         <div class="proj-role">${p.roles.map(r=>`<span>${r}</span>`).join('')}</div>
         <p class="proj-desc"><em style="color:var(--fg3);font-size:13px">${p.type} · ${p.date}</em><br><br>${p.desc}</p>
         <div class="proj-links">
-          <span class="proj-link primary" onclick="event.stopPropagation();showPage('project',${i});window.scrollTo(0,0)">View Case Study ↗</span>
+          <span class="proj-link primary" onclick="event.stopPropagation();showPage('project',${i});window.scrollTo(0,0)">View Project <svg class="lucide ico-inline" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></span>
           ${p.liveUrl?`<a href="${p.liveUrl}" class="proj-link" target="_blank" onclick="event.stopPropagation()">${esc(p.liveLabel||'Play on Itch.io')}</a>`:''}
         </div>
       </div>
@@ -1605,7 +1658,7 @@ function renderSite() {
   document.getElementById('writing-grid-el').innerHTML = data.writing.map(w=>`
     <div class="writing-card">
       <div><div class="writing-title">${w.title}</div><div class="writing-meta">${w.meta}</div><p class="writing-desc">${w.desc}</p></div>
-      ${w.url?`<a href="${w.url}" class="writing-link" target="_blank">Read ↗</a>`:''}
+      ${w.url?`<a href="${w.url}" class="writing-link" target="_blank">Read <svg class="lucide ico-inline" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>`:''}
     </div>`).join('');
 
   // ── Skills (grouped by category) ──
@@ -1631,7 +1684,7 @@ function renderSite() {
     <div class="exp-item" id="exp-${i}">
       <div class="exp-header" onclick="toggleExp(${i})">
         <div><div class="exp-company">${e.company}</div><div class="exp-role">${e.role}</div></div>
-        <div style="text-align:right;flex-shrink:0"><div class="exp-date">${e.date}</div><div class="exp-chevron">▾</div></div>
+        <div style="text-align:right;flex-shrink:0"><div class="exp-date">${e.date}</div><div class="exp-chevron"><svg class="lucide" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></div></div>
       </div>
       <div class="exp-body">${e.desc?`<p class="exp-desc">${e.desc}</p>`:''}${e.highlights.length?`<ul class="exp-highlights">${e.highlights.map(h=>`<li>${h}</li>`).join('')}</ul>`:''}${e.tech.length?`<div class="exp-tech">${e.tech.map(t=>`<span class="tech-tag">${t}</span>`).join('')}</div>`:''}</div>
     </div>`; };
@@ -1797,7 +1850,7 @@ function renderProjectDetail(idx) {
 
   document.getElementById('proj-detail-content').innerHTML = `
     <div class="pd-header-row">
-      <div class="pd-back" onclick="showPage('home');scrollToSection('projects')">← Back to Projects</div>
+      <div class="pd-back" onclick="showPage('home');scrollToSection('projects')"><svg class="lucide ico-inline-l" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Back to Projects</div>
     </div>
     <div class="pd-eyebrow">${p.type}</div>
     <h1 class="pd-title">${p.title}</h1>
@@ -1824,13 +1877,13 @@ function renderProjectDetail(idx) {
     ${renderEnvAssets(d.environmentAssets)}
     <!-- Play (label is editable per-project) and Source links -->
     <div class="pd-links">
-      ${p.liveUrl?`<a href="${p.liveUrl}" class="btn-primary" target="_blank">${esc(p.liveLabel||'Play on Itch.io')} ↗</a>`:''}
+      ${p.liveUrl?`<a href="${p.liveUrl}" class="btn-primary" target="_blank">${esc(p.liveLabel||'Play on Itch.io')} <svg class="lucide ico-inline" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>`:''}
       ${p.sourceUrl?`<a href="${p.sourceUrl}" class="btn-outline" target="_blank">Source</a>`:''}
     </div>
     <!-- Prev/Next project navigation -->
     <div class="pd-nav">
-      ${prevIdx!==null?`<div class="pd-nav-btn" onclick="renderProjectDetail(${prevIdx});window.scrollTo(0,0)">← ${data.projects[prevIdx].title}</div>`:'<div></div>'}
-      ${nextIdx!==null?`<div class="pd-nav-btn" onclick="renderProjectDetail(${nextIdx});window.scrollTo(0,0)">${data.projects[nextIdx].title} →</div>`:'<div></div>'}
+      ${prevIdx!==null?`<div class="pd-nav-btn" onclick="renderProjectDetail(${prevIdx});window.scrollTo(0,0)">${lucideIcon('arrow-left',{cls:'ico-inline-l'})} ${data.projects[prevIdx].title}</div>`:'<div></div>'}
+      ${nextIdx!==null?`<div class="pd-nav-btn" onclick="renderProjectDetail(${nextIdx});window.scrollTo(0,0)">${data.projects[nextIdx].title} ${lucideIcon('arrow-right',{cls:'ico-inline'})}</div>`:'<div></div>'}
     </div>
   `;
 }
